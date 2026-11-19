@@ -4,280 +4,415 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Bilal Abu Zaina Design House</title>
-<meta name="description" content="Order your interior design online — kitchens, bathrooms, TV units, 2D & 3D design per meter, technical drawings.">
+<meta name="description" content="Kitchens, bathrooms, TV units, 2D & 3D design per meter, technical drawings — order and pay online.">
 <meta property="og:title" content="Bilal Abu Zaina Design House">
-<meta property="og:description" content="Pick your design, pay online, get it delivered.">
-<meta name="theme-color" content="#2c3946">
+<meta property="og:description" content="Designs, ordered like products. Choose, pay, send your plan.">
+<meta name="theme-color" content="#efeae1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
 <script>
 /* =====================================================================
-   EDIT THIS BLOCK ONLY — prices, contact details, payment links.
+   EDIT THIS BLOCK ONLY — prices, scope, contact, payment.
    ===================================================================== */
 const CONFIG = {
-  // WhatsApp number in international format, digits only (Egypt: 20 + number without the first 0)
-  whatsapp: "201000000000",
-  instagram: "",                       // e.g. "bilalabouzeina" (shown in footer)
+  whatsapp: "201000000000",          // international format, digits only (20 + number without first 0)
+  instagram: "",                     // e.g. "bilalabouzeina"
+  instapay: "",                      // e.g. "bilal@instapay"   ("" = hidden)
+  vodafoneCash: "",                  // e.g. "01000000000"      ("" = hidden)
 
-  // Manual payment options shown at checkout. Leave "" to hide one.
-  instapay: "",                        // e.g. "bilal@instapay"
-  vodafoneCash: "",                    // e.g. "01000000000"
-
-  // Which package gets the "From my latest video" badge and goes first.
-  // Change it whenever a video goes viral: "kitchen", "bathroom", "tv", "dressing" ...
+  // The design from your latest viral video: gets the stamp and moves to the top.
   featured: "kitchen",
 
   currency: { en: "EGP", ar: "ج.م" },
 
-  // Fixed-price packages. payLink = card payment link from Paymob / Kashier / Fawry (optional).
+  // Fixed-price designs. payLink = card payment link (Paymob / Kashier / Fawry), optional.
   packages: [
-    { id: "kitchen", icon: "kitchen", price: 5000, days: 5, payLink: "",
-      name: { en: "Kitchen Design", ar: "تصميم مطبخ" },
-      items: {
-        en: ["Full 3D design with realistic renders", "Layout & cabinet plan", "Materials & colors selection", "Elevations with dimensions for the carpenter", "1 round of revisions"],
-        ar: ["تصميم 3D كامل بصور واقعية", "توزيع المطبخ وخطة الوحدات", "اختيار الخامات والألوان", "واجهات بالمقاسات للنجار", "تعديل مرة واحدة"] } },
-    { id: "bathroom", icon: "bath", price: 3500, days: 4, payLink: "",
-      name: { en: "Bathroom Design", ar: "تصميم حمام" },
-      items: {
-        en: ["3D design with realistic renders", "Tiles layout & wall elevations", "Sanitary ware & fixtures placement", "1 round of revisions"],
-        ar: ["تصميم 3D بصور واقعية", "توزيع السيراميك وواجهات الحوائط", "أماكن الأدوات الصحية", "تعديل مرة واحدة"] } },
-    { id: "tv", icon: "tv", price: 2500, days: 3, payLink: "",
-      name: { en: "TV Unit Design", ar: "تصميم وحدة تليفزيون" },
-      items: {
-        en: ["3D design of the TV wall", "Detailed drawing with dimensions", "Lighting & materials suggestions", "1 round of revisions"],
-        ar: ["تصميم 3D لحائط التليفزيون", "رسم تنفيذي بالمقاسات", "اقتراح الإضاءة والخامات", "تعديل مرة واحدة"] } },
-    { id: "dressing", icon: "wardrobe", price: 3000, days: 4, payLink: "",
-      name: { en: "Dressing Room Design", ar: "تصميم غرفة ملابس" },
-      items: {
-        en: ["3D design with realistic renders", "Shelving & hanging layout", "Drawings with dimensions", "1 round of revisions"],
-        ar: ["تصميم 3D بصور واقعية", "توزيع الأرفف والشماعات", "رسومات بالمقاسات", "تعديل مرة واحدة"] } }
+    { id: "kitchen", code: "K-01", price: 5000, days: 5, payLink: "",
+      name:  { en: "Kitchen", ar: "مطبخ" },
+      scope: { en: "Up to 4 m of cabinets · 3D renders · layout & elevations with dimensions · 1 revision. Extra meter: 600 EGP.",
+               ar: "حتى ٤ متر وحدات · صور 3D · توزيع وواجهات بالمقاسات · تعديل واحد. المتر الزيادة: ٦٠٠ ج.م." } },
+    { id: "bathroom", code: "B-01", price: 3500, days: 4, payLink: "",
+      name:  { en: "Bathroom", ar: "حمام" },
+      scope: { en: "One bathroom up to 6 m² · 3D renders · tile layout & wall elevations · 1 revision.",
+               ar: "حمام واحد حتى ٦ م² · صور 3D · توزيع السيراميك وواجهات الحوائط · تعديل واحد." } },
+    { id: "tv", code: "T-01", price: 2500, days: 3, payLink: "",
+      name:  { en: "TV Unit", ar: "وحدة تليفزيون" },
+      scope: { en: "One TV wall up to 4 m wide · 3D render · execution drawing with dimensions · 1 revision.",
+               ar: "حائط واحد حتى ٤ متر عرض · صورة 3D · رسم تنفيذي بالمقاسات · تعديل واحد." } },
+    { id: "dressing", code: "D-01", price: 3000, days: 4, payLink: "",
+      name:  { en: "Dressing Room", ar: "غرفة ملابس" },
+      scope: { en: "Up to 3 walls · 3D renders · shelving layout with dimensions · 1 revision.",
+               ar: "حتى ٣ حوائط · صور 3D · توزيع الأرفف بالمقاسات · تعديل واحد." } }
   ],
 
-  // Per-square-meter services. Client types the area, total is calculated.
+  // Per-square-meter work. deposit = share paid now (0.5 = 50%); 1 = full payment.
   perMeter: [
-    { id: "2d", icon: "plan", rate: 150, min: 50, days: 5, payLink: "",
-      name: { en: "2D Layout Design", ar: "تصميم 2D (توزيع)" },
-      desc: { en: "Furniture layout plan for your whole apartment or villa.", ar: "توزيع الأثاث للشقة أو الفيلا بالكامل." } },
-    { id: "3d", icon: "cube", rate: 350, min: 50, days: 10, payLink: "",
-      name: { en: "3D Interior Design", ar: "تصميم 3D داخلي" },
-      desc: { en: "Full 3D design with realistic renders for every room.", ar: "تصميم 3D كامل بصور واقعية لكل الغرف." } },
-    { id: "tech", icon: "ruler", rate: 200, min: 50, days: 7, payLink: "",
+    { id: "2d",   code: "P-2D", rate: 150, min: 50, days: 5,  deposit: 0.5, payLink: "",
+      name: { en: "2D Layout", ar: "توزيع 2D" },
+      desc: { en: "Furniture layout for the whole unit.", ar: "توزيع الأثاث للوحدة كاملة." } },
+    { id: "3d",   code: "P-3D", rate: 350, min: 50, days: 10, deposit: 0.5, payLink: "",
+      name: { en: "3D Interior", ar: "تصميم 3D" },
+      desc: { en: "Full 3D design, realistic renders of every room.", ar: "تصميم 3D كامل بصور واقعية لكل الغرف." } },
+    { id: "tech", code: "P-TD", rate: 200, min: 50, days: 7,  deposit: 0.5, payLink: "",
       name: { en: "Technical Drawings", ar: "رسومات تنفيذية" },
-      desc: { en: "Execution drawings: electrical, plumbing, ceilings, flooring.", ar: "رسومات تنفيذية: كهرباء، سباكة، أسقف، أرضيات." } }
-  ]
+      desc: { en: "Electrical, plumbing, ceilings, flooring.", ar: "كهرباء، سباكة، أسقف، أرضيات." } }
+  ],
+
+  // Your work. Add image paths/URLs, e.g. { src: "work/kitchen-1.jpg", en: "Kitchen, New Cairo", ar: "مطبخ، التجمع" }
+  portfolio: []
 };
 </script>
 <style>
 :root{
-  --brand:#2c3946;--brand-2:#3b4a5a;--accent:#c8a46a;--accent-ink:#1d1a14;
-  --bg:#f4f1ec;--surface:#ffffff;--surface-2:#f8f6f2;--ink:#1f242a;--muted:#646b74;--line:#e4dfd6;
-  --ok:#2f7d4f;--hot:#c2532d;--shadow:0 1px 2px rgba(20,25,30,.06),0 8px 24px rgba(20,25,30,.06);
-  --font:"Cairo",system-ui,"Segoe UI",Tahoma,sans-serif;
+  --paper:#efeae1;--paper-2:#e7e1d5;--ink:#191714;--ink-2:#55504a;--rule:rgba(25,23,20,.85);--hair:rgba(25,23,20,.16);
+  --grid:rgba(25,23,20,.045);--red:#c8361f;--on-ink:#efeae1;
+  --disp:"Archivo","Reem Kufi",sans-serif;--body:"Archivo","IBM Plex Sans Arabic",sans-serif;--mono:"IBM Plex Mono","IBM Plex Sans Arabic",monospace;
 }
+/* dark = blueprint */
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#13171b;--surface:#1b2026;--surface-2:#222930;--ink:#ebeef1;--muted:#a3abb4;--line:#313941;
-  --ok:#6cc28f;--hot:#f08a5d;--shadow:0 1px 2px rgba(0,0,0,.3);color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#13171b;--surface:#1b2026;--surface-2:#222930;--ink:#ebeef1;--muted:#a3abb4;--line:#313941;--ok:#6cc28f;--hot:#f08a5d;--shadow:0 1px 2px rgba(0,0,0,.3);color-scheme:dark}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  --paper:#0f2a44;--paper-2:#123252;--ink:#e6eef6;--ink-2:#9fb6cc;--rule:rgba(230,238,246,.8);--hair:rgba(230,238,246,.18);
+  --grid:rgba(230,238,246,.06);--red:#ff8a6b;--on-ink:#0f2a44;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#0f2a44;--paper-2:#123252;--ink:#e6eef6;--ink-2:#9fb6cc;--rule:rgba(230,238,246,.8);--hair:rgba(230,238,246,.18);--grid:rgba(230,238,246,.06);--red:#ff8a6b;--on-ink:#0f2a44;color-scheme:dark}
+
+*{box-sizing:border-box;border-radius:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px}
 button,input,textarea{font:inherit;color:inherit}
-button{cursor:pointer}
+button{cursor:pointer;background:none;border:0;padding:0}
 a{color:inherit}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.wrap{max-width:1080px;margin:0 auto;padding-inline:16px}
+:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+::selection{background:var(--red);color:var(--paper)}
 
-/* header */
-header.top{background:var(--brand);color:#fff}
-.bar{display:flex;align-items:center;gap:12px;padding-block:12px}
-.logo{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
-.mark{width:38px;height:38px;border-radius:10px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-weight:800;font-size:15px;flex:none;letter-spacing:.5px}
-.logo b{display:block;font-size:15px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.logo small{display:block;font-size:12px;opacity:.75;line-height:1.2}
-.lang{margin-inline-start:auto;background:rgba(255,255,255,.12);border:0;color:#fff;border-radius:999px;padding:6px 14px;font-weight:600;font-size:14px}
-.hero{padding-block:28px 40px}
-.hero h1{font-size:clamp(26px,6vw,42px);line-height:1.25;margin:0 0 10px;font-weight:800}
-.hero h1 em{font-style:normal;color:var(--accent)}
-.hero p{margin:0 0 20px;opacity:.85;max-width:560px}
-.cta-row{display:flex;gap:10px;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:12px 20px;font-weight:700;text-decoration:none;font-size:16px;min-height:48px}
-.btn-accent{background:var(--accent);color:var(--accent-ink)}
-.btn-ghost{background:rgba(255,255,255,.12);color:#fff}
-.btn-dark{background:var(--brand);color:#fff}
-:root[data-theme="dark"] .btn-dark{background:var(--accent);color:var(--accent-ink)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn-dark{background:var(--accent);color:var(--accent-ink)}}
-.btn-line{background:transparent;border:1.5px solid var(--line);color:var(--ink)}
-.btn-wa{background:#1fa855;color:#fff}
-.btn[disabled]{opacity:.45;cursor:not-allowed}
-.btn svg{width:20px;height:20px;flex:none}
-.trust{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-size:14px;opacity:.85}
-.trust span{display:flex;align-items:center;gap:6px}
-.trust svg{width:18px;height:18px;color:var(--accent)}
+.sheet{max-width:1120px;margin:0 auto;padding-inline:16px}
+@media (min-width:760px){.sheet{padding-inline:32px}}
+.mono{font-family:var(--mono);font-size:12px;font-weight:500}
+html[lang="en"] .mono,html[lang="en"] .cap{text-transform:uppercase;letter-spacing:.08em}
+.muted{color:var(--ink-2)}
+.red{color:var(--red)}
 
-/* sections */
-section{padding-block:36px}
-h2{font-size:clamp(22px,4.5vw,28px);margin:0 0 6px;font-weight:800;line-height:1.3}
-.sub{color:var(--muted);margin:0 0 22px}
-.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;box-shadow:var(--shadow);position:relative;scroll-margin-top:20px;transition:box-shadow .3s,border-color .3s}
-.card.flash{border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 35%,transparent)}
-.card.featured{border-color:var(--accent)}
-.badge{position:absolute;top:-11px;inset-inline-start:16px;background:var(--hot);color:#fff;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px}
-.ic{width:46px;height:46px;border-radius:12px;background:var(--surface-2);display:grid;place-items:center;color:var(--accent);margin-bottom:12px}
-.ic svg{width:26px;height:26px}
-.card h3{margin:0 0 4px;font-size:19px;line-height:1.35}
-.price{font-size:26px;font-weight:800;margin:2px 0 2px}
-.price small{font-size:14px;font-weight:600;color:var(--muted)}
-.meta{font-size:13px;color:var(--muted);margin-bottom:12px}
-.card ul{list-style:none;padding:0;margin:0 0 18px;font-size:14px;flex:1}
-.card li{display:flex;gap:8px;padding-block:3px}
-.card li svg{width:16px;height:16px;flex:none;margin-top:4px;color:var(--ok)}
-.card p.d{font-size:14px;color:var(--muted);margin:0 0 14px;flex:1}
-.calc{display:flex;align-items:center;gap:8px;background:var(--surface-2);border-radius:12px;padding:8px 10px;margin-bottom:12px}
-.calc label{font-size:13px;color:var(--muted);white-space:nowrap}
-.calc input{width:100%;min-width:0;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:6px 10px;font-size:16px;text-align:center}
-.calc .tot{font-weight:800;white-space:nowrap}
-.minnote{font-size:12px;color:var(--muted);margin:-6px 0 12px}
+/* top strip */
+.strip{display:flex;align-items:center;gap:12px;border-bottom:1.5px solid var(--rule);padding-block:12px}
+.strip .id{display:flex;gap:10px;align-items:center;min-width:0}
+.strip .id .mono{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.monogram{font-family:"Archivo",sans-serif;font-stretch:125%;font-weight:900;font-size:13px;border:1.5px solid var(--ink);padding:3px 6px;line-height:1;letter-spacing:.02em}
+.langs{margin-inline-start:auto;display:flex;font-family:var(--mono);font-size:12px;font-weight:600}
+.langs button{padding:4px 8px;border:1.5px solid var(--ink);color:var(--ink)}
+.langs button+button{border-inline-start:0}
+.langs button[aria-pressed="true"]{background:var(--ink);color:var(--on-ink)}
 
-/* steps */
-.steps{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));counter-reset:s}
-.step{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
-.step b{display:flex;align-items:center;gap:10px;font-size:16px;margin-bottom:4px}
-.step b::before{counter-increment:s;content:counter(s);width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-size:14px;flex:none}
-.step p{margin:0;font-size:14px;color:var(--muted)}
+/* hero */
+.hero{display:grid;gap:20px;padding-block:28px 36px;border-bottom:1.5px solid var(--rule)}
+@media (min-width:860px){.hero{grid-template-columns:1.15fr .85fr;align-items:end;gap:40px;padding-block:56px 48px}}
+.name{font-family:var(--disp);font-weight:800;line-height:.92;margin:0;font-size:clamp(44px,13vw,124px)}
+html[lang="en"] .name{font-stretch:125%;text-transform:uppercase;letter-spacing:-.02em;font-size:clamp(40px,11.5vw,112px)}
+html[lang="ar"] .name{font-weight:700;line-height:1.15}
+.name .l2{display:block;font-size:.38em;font-weight:500;margin-top:.35em;line-height:1.1}
+html[lang="en"] .name .l2{font-stretch:100%;letter-spacing:.14em;font-weight:600}
+.lede{font-size:clamp(18px,4.6vw,22px);line-height:1.45;margin:18px 0 22px;max-width:30ch}
+.btn{display:inline-flex;align-items:center;gap:12px;min-height:50px;padding:0 20px;background:var(--ink);color:var(--on-ink);font-weight:700;text-decoration:none;font-size:16px;border:1.5px solid var(--ink);transition:background .15s,color .15s}
+.btn:hover{background:transparent;color:var(--ink)}
+.btn .arr{font-family:var(--mono);font-weight:500}
+html[dir="rtl"] .arr.flip{display:inline-block;transform:scaleX(-1)}
+.btn.out{background:transparent;color:var(--ink)}
+.btn.out:hover{background:var(--ink);color:var(--on-ink)}
+.btn.wa{background:#167d43;border-color:#167d43;color:#fff}
+.btn.wa:hover{background:transparent;color:var(--ink)}
+.plan{width:100%;height:auto;color:var(--ink);display:block}
+.plan .r{color:var(--red)}
+.plan text{font-family:"IBM Plex Mono",monospace;font-size:9px;fill:currentColor}
+.plan-cap{display:flex;justify-content:space-between;border-top:1px solid var(--hair);padding-top:6px;margin-top:4px}
 
-/* faq */
-details{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:10px}
-summary{font-weight:700;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:10px}
-summary::-webkit-details-marker{display:none}
-summary::after{content:"+";font-size:20px;line-height:1;color:var(--accent)}
-details[open] summary::after{content:"–"}
-details p{margin:8px 0 0;color:var(--muted);font-size:15px}
+/* section heads */
+section{padding-block:36px 8px}
+.shead{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:baseline;margin-bottom:18px}
+.shead .no{font-family:var(--mono);font-size:13px;color:var(--red);font-weight:600}
+.shead h2{margin:0;font-family:var(--disp);font-weight:800;font-size:clamp(26px,6vw,40px);line-height:1.1}
+html[lang="en"] .shead h2{font-stretch:112%;text-transform:uppercase;letter-spacing:-.01em}
+html[lang="ar"] .shead h2{font-weight:700}
+.shead p{grid-column:2;margin:0;color:var(--ink-2)}
 
-.custom{background:var(--brand);color:#fff;border-radius:20px;padding:24px;display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-.custom h3{margin:0 0 4px;font-size:20px}
-.custom p{margin:0;opacity:.8;font-size:15px}
-footer{padding-block:28px 40px;color:var(--muted);font-size:14px;text-align:center}
-footer a{color:var(--muted)}
+/* schedule (fixed packages) */
+.sched{border-top:1.5px solid var(--rule)}
+.sched-hd{display:none}
+.row{position:relative;display:grid;grid-template-columns:52px 1fr auto;gap:2px 12px;padding:18px 0 20px;border-bottom:1px solid var(--hair);scroll-margin-top:24px;transition:background .3s}
+.row .code{font-family:var(--mono);font-size:12px;font-weight:600;padding-top:7px}
+.row .nm{font-family:var(--disp);font-weight:700;font-size:clamp(24px,6.4vw,34px);line-height:1.15;margin:0}
+html[lang="en"] .row .nm{font-stretch:110%;text-transform:uppercase;letter-spacing:-.01em}
+.row .pr{grid-column:3;grid-row:1;font-family:var(--mono);font-weight:600;font-size:clamp(17px,4.4vw,22px);text-align:end;white-space:nowrap;padding-top:4px}
+.row .pr small{display:block;font-size:11px;font-weight:500;color:var(--ink-2)}
+.row .sc{grid-column:2 / 4;margin:6px 0 12px;color:var(--ink-2);font-size:15px;max-width:60ch}
+.row .act{grid-column:2 / 4;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.order{display:inline-flex;align-items:center;gap:10px;font-weight:700;border-bottom:2px solid var(--ink);padding:4px 0;font-size:16px}
+.order:hover{color:var(--red);border-color:var(--red)}
+.row.hit{background:color-mix(in srgb,var(--red) 9%,transparent)}
+.stamp{position:absolute;inset-inline-end:0;top:-10px;transform:rotate(-4deg);border:2px solid var(--red);color:var(--red);font-family:var(--mono);font-weight:600;font-size:11px;padding:3px 8px;background:var(--paper);line-height:1.3;box-shadow:0 0 0 2px var(--paper),0 0 0 3px var(--red)}
+html[dir="rtl"] .stamp{transform:rotate(4deg)}
+@media (min-width:760px){
+  .sched-hd{display:grid;grid-template-columns:72px 1fr 2fr 140px 150px;gap:16px;padding:8px 0;border-bottom:1px solid var(--hair)}
+  .row{grid-template-columns:72px 1fr 2fr 140px 150px;gap:16px;align-items:start;padding:22px 0}
+  .row .sc{grid-column:auto;margin:6px 0 0}
+  .row .act{grid-column:auto;justify-content:flex-end;padding-top:6px}
+  .row .pr{text-align:start;grid-column:auto;grid-row:auto}
+  .stamp{inset-inline-end:auto;inset-inline-start:calc(72px + 16px);top:-11px}
+}
 
-/* checkout */
-.overlay{position:fixed;inset:0;background:rgba(10,14,18,.55);display:flex;align-items:flex-end;justify-content:center;z-index:50;padding:0}
-.overlay[hidden]{display:none}
-.sheet{background:var(--surface);width:100%;max-width:520px;max-height:92vh;overflow-y:auto;border-radius:22px 22px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px));animation:up .22s ease-out}
-@media (min-width:640px){.overlay{align-items:center;padding:20px}.sheet{border-radius:22px}}
-@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
-.sheet-h{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px}
-.sheet-h h3{margin:0;font-size:20px;line-height:1.3}
-.sheet-h small{color:var(--muted);font-size:13px}
-.x{margin-inline-start:auto;background:var(--surface-2);border:0;width:36px;height:36px;border-radius:50%;font-size:20px;line-height:1;flex:none}
-.field{margin-bottom:12px}
-.field label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
-.field input,.field textarea{width:100%;border:1px solid var(--line);background:var(--surface-2);border-radius:10px;padding:10px 12px;font-size:16px}
-.field textarea{min-height:70px;resize:vertical}
-.sum{background:var(--surface-2);border-radius:12px;padding:12px 14px;margin:6px 0 16px;font-size:15px}
-.sum div{display:flex;justify-content:space-between;gap:10px}
-.sum .t{font-weight:800;font-size:19px;border-top:1px dashed var(--line);margin-top:6px;padding-top:6px}
-.paylabel{font-weight:700;margin:0 0 8px;font-size:15px}
-.pay{display:grid;gap:10px}
-.manual{border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14px}
-.manual .row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-block:4px}
-.manual code{font-family:inherit;font-weight:700;direction:ltr;unicode-bidi:embed}
-.copy{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:4px 10px;font-size:13px}
-.note{font-size:13px;color:var(--muted);margin:10px 0 0}
-.err{color:var(--hot);font-size:13px;margin-top:4px}
-.oid{font-size:12px;color:var(--muted);direction:ltr;unicode-bidi:embed}
+/* scale ruler calculator */
+.calc{border:1.5px solid var(--rule);background:var(--paper)}
+.calc-top{padding:18px 16px 8px;display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--hair)}
+.calc-top label{display:block;width:100%}
+.area{display:flex;align-items:baseline;gap:8px;width:100%}
+.area input{flex:1;min-width:0;width:100%;font-family:var(--disp);font-weight:800;font-size:clamp(56px,16vw,96px);line-height:1;border:0;border-bottom:2px solid var(--ink);background:transparent;padding:0;text-align:center;-moz-appearance:textfield}
+html[lang="en"] .area input{font-stretch:125%}
+.area input::-webkit-outer-spin-button,.area input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.area .u{font-family:var(--mono);font-size:20px;font-weight:600}
+.ruler{padding:6px 16px 18px;border-bottom:1.5px solid var(--rule)}
+.ruler input{width:100%;-webkit-appearance:none;appearance:none;height:34px;background:
+  repeating-linear-gradient(90deg,var(--ink) 0 1px,transparent 1px 10%) bottom/100% 14px no-repeat,
+  repeating-linear-gradient(90deg,var(--ink) 0 1px,transparent 1px 2%) bottom/100% 7px no-repeat;
+  border-bottom:1.5px solid var(--ink);cursor:ew-resize;margin:0}
+html[dir="rtl"] .ruler input{direction:ltr}
+.ruler input::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:34px;background:var(--red);clip-path:polygon(0 0,100% 0,100% 70%,50% 100%,0 70%)}
+.ruler input::-moz-range-thumb{width:14px;height:34px;border:0;border-radius:0;background:var(--red);clip-path:polygon(0 0,100% 0,100% 70%,50% 100%,0 70%)}
+.ticks{display:flex;justify-content:space-between;direction:ltr;font-family:var(--mono);font-size:10px;color:var(--ink-2);margin-top:4px}
+.mrow{display:grid;grid-template-columns:52px 1fr auto;gap:2px 12px;padding:16px;border-bottom:1px solid var(--hair);scroll-margin-top:24px;position:relative;transition:background .3s}
+.mrow:last-child{border-bottom:0}
+.mrow.hit{background:color-mix(in srgb,var(--red) 9%,transparent)}
+.mrow .code{font-family:var(--mono);font-size:12px;font-weight:600;padding-top:4px}
+.mrow h3{margin:0;font-size:19px;font-weight:700;line-height:1.3}
+.mrow .d{grid-column:2 / 4;margin:2px 0 8px;font-size:14px;color:var(--ink-2)}
+.mrow .tot{font-family:var(--mono);font-weight:600;font-size:clamp(18px,4.8vw,24px);text-align:end;white-space:nowrap}
+.mrow .tot small{display:block;font-size:11px;font-weight:500;color:var(--ink-2)}
+.mrow .act{grid-column:2 / 4;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+@media (min-width:760px){.calc{display:grid;grid-template-columns:340px 1fr}.calc-left{border-inline-end:1.5px solid var(--rule);display:flex;flex-direction:column;justify-content:space-between}.ruler{border-bottom:0}}
+
+/* process — drawn as a dimension line */
+.proc{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.proc li{display:grid;grid-template-columns:52px 1fr;gap:12px;padding-bottom:22px;position:relative}
+.proc li::before{content:"";position:absolute;inset-inline-start:7px;top:22px;bottom:0;border-inline-start:1px solid var(--ink)}
+.proc li:last-child::before{display:none}
+.proc .n{font-family:var(--mono);font-size:12px;font-weight:600;display:flex;gap:8px;align-items:flex-start}
+.proc .n::before{content:"";width:15px;height:15px;border:1.5px solid var(--ink);background:var(--paper);flex:none;margin-top:2px;transform:rotate(45deg) scale(.75)}
+.proc b{display:block;font-size:18px}
+.proc p{margin:2px 0 0;color:var(--ink-2);font-size:15px}
+@media (min-width:860px){
+  .proc{grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink);padding-top:0}
+  .proc li{grid-template-columns:1fr;gap:6px;padding:0 20px 0 0;padding-top:18px}
+  html[dir="rtl"] .proc li{padding:18px 0 0 20px}
+  .proc li::before{display:none}
+  .proc .n::before{position:absolute;top:-9px;inset-inline-start:-8px}
+  .proc .n{padding-top:0}
+}
+
+/* portfolio */
+.work{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.work figure{margin:0;border:1.5px solid var(--rule);padding:8px;background:var(--paper)}
+.work img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;filter:saturate(.92)}
+.work figcaption{display:flex;justify-content:space-between;gap:8px;padding-top:8px}
+
+/* general notes */
+.notes{margin:0;padding:0;list-style:none;counter-reset:n;columns:1;column-gap:40px}
+@media (min-width:860px){.notes{columns:2}}
+.notes li{break-inside:avoid;display:grid;grid-template-columns:34px 1fr;padding:12px 0;border-top:1px solid var(--hair);counter-increment:n}
+.notes li::before{content:counter(n) ".";font-family:var(--mono);font-weight:600;font-size:13px;color:var(--red);padding-top:2px}
+.notes b{display:block}
+.notes span{color:var(--ink-2);font-size:15px}
+
+/* custom request */
+.custom{display:grid;gap:16px;border:1.5px solid var(--rule);padding:20px;margin-top:8px;background:var(--paper);position:relative}
+.custom::before,.custom::after{content:"";position:absolute;width:12px;height:12px;border:1.5px solid var(--red)}
+.custom::before{top:-7px;inset-inline-start:-7px;border-inline-end:0;border-bottom:0}
+.custom::after{bottom:-7px;inset-inline-end:-7px;border-inline-start:0;border-top:0}
+.custom h3{margin:0;font-family:var(--disp);font-size:24px;font-weight:700;line-height:1.2}
+html[lang="en"] .custom h3{font-stretch:110%;text-transform:uppercase}
+.custom p{margin:4px 0 0;color:var(--ink-2)}
+@media (min-width:760px){.custom{grid-template-columns:1fr auto;align-items:center;padding:28px}}
+
+/* title block footer */
+.tblock{margin:44px 0 28px;border:1.5px solid var(--rule);display:grid;grid-template-columns:1fr 1fr;background:var(--paper)}
+.tblock div{padding:10px 12px;border-bottom:1px solid var(--hair);min-width:0}
+.tblock div:nth-child(odd){border-inline-end:1px solid var(--hair)}
+.tblock .wide{grid-column:1 / -1;border-inline-end:0!important}
+.tblock .k{display:block;font-family:var(--mono);font-size:10px;color:var(--ink-2)}
+html[lang="en"] .tblock .k{text-transform:uppercase;letter-spacing:.08em}
+.tblock .v{font-weight:700;font-size:15px;overflow-wrap:anywhere}
+.tblock .big{font-family:var(--disp);font-size:22px;font-weight:800;line-height:1.1}
+html[lang="en"] .tblock .big{font-stretch:120%;text-transform:uppercase}
+.tblock div:nth-last-child(-n+2){border-bottom:0}
+@media (min-width:760px){.tblock{grid-template-columns:2fr 1fr 1fr 1fr}.tblock .wide{grid-column:auto;border-inline-end:1px solid var(--hair)!important}.tblock div{border-bottom:0;border-inline-end:1px solid var(--hair)}.tblock div:last-child{border-inline-end:0}}
+
+/* work order (checkout) */
+.wo{position:fixed;inset:0;z-index:50;display:flex;justify-content:flex-end;background:rgba(15,14,12,.5)}
+.wo[hidden]{display:none}
+.wo-panel{width:100%;max-width:480px;height:100%;overflow-y:auto;background:var(--paper);border-inline-start:1.5px solid var(--rule);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;
+  padding:0 20px calc(28px + env(safe-area-inset-bottom,0px));animation:slide .22s ease-out}
+@keyframes slide{from{transform:translateX(24px);opacity:0}to{transform:none;opacity:1}}
+html[dir="rtl"] .wo-panel{animation-name:slideR}
+@keyframes slideR{from{transform:translateX(-24px);opacity:0}to{transform:none;opacity:1}}
+.wo-hd{position:sticky;top:0;background:var(--paper);display:flex;align-items:center;gap:10px;padding:14px 0;border-bottom:1.5px solid var(--rule);margin-bottom:18px;z-index:1}
+.wo-hd .x{margin-inline-start:auto;font-family:var(--mono);font-weight:600;font-size:13px;border:1.5px solid var(--ink);padding:5px 10px}
+.wo h3{margin:0 0 2px;font-family:var(--disp);font-weight:800;font-size:30px;line-height:1.1}
+html[lang="en"] .wo h3{font-stretch:115%;text-transform:uppercase}
+.fl{display:block;margin-top:18px}
+.fl .mono{display:block;color:var(--ink-2);margin-bottom:2px}
+.fl input,.fl textarea{width:100%;border:0;border-bottom:1.5px solid var(--ink);background:transparent;padding:6px 0 8px;font-size:18px;outline:none}
+.fl textarea{min-height:56px;resize:vertical;font-size:16px}
+.fl input:focus,.fl textarea:focus{border-color:var(--red)}
+.err{color:var(--red);font-size:14px;margin-top:10px;font-weight:600}
+.lines{margin:24px 0 8px;border-top:1.5px solid var(--rule)}
+.lines div{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--hair);font-size:15px}
+.lines div span:last-child{font-family:var(--mono);font-weight:500;text-align:end}
+.lines .due{border-bottom:1.5px solid var(--rule);font-weight:700;font-size:17px}
+.lines .due span:last-child{font-size:20px;font-weight:600;color:var(--red)}
+.payh{margin:24px 0 10px}
+.paybox{display:grid;gap:10px}
+.paybox .btn{justify-content:space-between;width:100%}
+.manual{border:1.5px solid var(--rule);padding:4px 14px 14px}
+.manual .r{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--hair)}
+.manual code{font-family:var(--mono);font-weight:600;direction:ltr;unicode-bidi:embed}
+.manual .cp{font-family:var(--mono);font-size:12px;font-weight:600;border-bottom:1.5px solid var(--ink);padding:2px 0}
+.manual .btn{margin-top:12px}
+.fine{font-size:13px;color:var(--ink-2);margin:14px 0 0}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 
-<header class="top">
-  <div class="wrap">
-    <div class="bar">
-      <a class="logo" href="#">
-        <span class="mark">BA</span>
-        <span><b data-t="brand"></b><small data-t="brandSub"></small></span>
-      </a>
-      <button class="lang" id="langBtn" type="button">English</button>
-    </div>
-    <div class="hero">
-      <h1 data-t="heroH" data-html></h1>
-      <p data-t="heroP"></p>
-      <div class="cta-row">
-        <a class="btn btn-accent" href="#packages" data-t="heroCta"></a>
-        <a class="btn btn-ghost" href="#meter" data-t="heroCta2"></a>
-      </div>
-      <div class="trust">
-        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l7 3v6c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg><i data-t="t1" style="font-style:normal"></i></span>
-        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><i data-t="t2" style="font-style:normal"></i></span>
-        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12a8 8 0 0114-5.3M20 12a8 8 0 01-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg><i data-t="t3" style="font-style:normal"></i></span>
-      </div>
+<div class="sheet">
+  <div class="strip">
+    <div class="id"><span class="monogram">BAZ</span><span class="mono" data-t="strip"></span></div>
+    <div class="langs" role="group" aria-label="Language">
+      <button type="button" data-lang="ar">ع</button><button type="button" data-lang="en">EN</button>
     </div>
   </div>
-</header>
 
-<main class="wrap">
-  <section id="packages">
-    <h2 data-t="pkH"></h2>
-    <p class="sub" data-t="pkP"></p>
-    <div class="grid" id="pkGrid"></div>
-  </section>
-
-  <section id="meter">
-    <h2 data-t="mH"></h2>
-    <p class="sub" data-t="mP"></p>
-    <div class="grid" id="mGrid"></div>
-  </section>
-
-  <section id="how">
-    <h2 data-t="hH"></h2>
-    <p class="sub" data-t="hP"></p>
-    <div class="steps">
-      <div class="step"><b data-t="s1"></b><p data-t="s1p"></p></div>
-      <div class="step"><b data-t="s2"></b><p data-t="s2p"></p></div>
-      <div class="step"><b data-t="s3"></b><p data-t="s3p"></p></div>
-      <div class="step"><b data-t="s4"></b><p data-t="s4p"></p></div>
+  <header class="hero">
+    <div>
+      <h1 class="name"><span data-t="name1"></span><span class="l2" data-t="name2"></span></h1>
+      <p class="lede" data-t="lede"></p>
+      <a class="btn" href="#s1"><span data-t="cta"></span><span class="arr">↓</span></a>
     </div>
-  </section>
+    <figure style="margin:0">
+      <svg class="plan" viewBox="0 0 320 236" role="img" aria-label="Kitchen plan drawing">
+        <!-- dimension top -->
+        <g stroke="currentColor" stroke-width=".8" fill="none">
+          <path d="M40 22h236M40 16v12M276 16v12M36 26l8-8M272 26l8-8"/>
+          <path d="M18 40v150M12 40h12M12 190h12M14 44l8-8M14 194l8-8"/>
+        </g>
+        <text x="158" y="15" text-anchor="middle">2670</text>
+        <text x="11" y="118" text-anchor="middle" transform="rotate(-90 11 118)">1750</text>
+        <!-- walls -->
+        <g fill="currentColor">
+          <path d="M34 34h248v8H42v156h-8z"/>
+          <path d="M274 42h8v60h-8z"/>
+          <path d="M274 168h8v46h-8z"/>
+          <path d="M42 206h60v8H42z"/>
+          <path d="M150 206h132v8H150z"/>
+        </g>
+        <!-- counters -->
+        <g stroke="currentColor" stroke-width="1" fill="none">
+          <path d="M42 42h232v36H78v112H42z"/>
+          <path d="M42 70h232" stroke-dasharray="3 3" stroke-width=".6"/>
+          <!-- sink -->
+          <rect x="118" y="47" width="46" height="25" rx="3"/><rect x="122" y="51" width="18" height="17" rx="2"/><rect x="143" y="51" width="17" height="17" rx="2"/>
+          <circle cx="141" cy="46" r="1.6"/>
+          <!-- fridge -->
+          <rect x="220" y="44" width="50" height="34"/><path d="M220 44l50 34M270 44l-50 34" stroke-width=".6"/>
+          <!-- hob -->
+          <rect x="47" y="104" width="27" height="48"/>
+          <circle cx="54" cy="115" r="4.5"/><circle cx="67" cy="115" r="4.5"/><circle cx="54" cy="140" r="4.5"/><circle cx="67" cy="140" r="4.5"/>
+          <!-- door swing -->
+          <path d="M102 206v-48" stroke-width="1.2"/><path d="M102 158a48 48 0 0148 48" stroke-dasharray="2 2" stroke-width=".7"/>
+          <!-- window -->
+          <path d="M274 102h8M274 168h8M276 102v66M280 102v66" stroke-width=".7"/>
+          <!-- island -->
+          <rect x="134" y="118" width="84" height="38"/>
+          <path d="M140 160v8M155 160v8M170 160v8M185 160v8M200 160v8M212 160v8" stroke-width=".7"/>
+        </g>
+        <text x="176" y="140" text-anchor="middle">ISLAND</text>
+        <text x="245" y="92" text-anchor="middle">FR</text>
+        <!-- red markup -->
+        <g class="r" stroke="currentColor" fill="none" stroke-width="1.4">
+          <path d="M40 98c4-10 12-8 18-6 6-6 16-4 20 2 8-2 12 6 9 12 6 4 4 14-2 16 4 8-2 16-10 14-2 8-14 10-18 4-8 4-16-2-16-8-8-2-8-12-2-16-6-6 0-16 1-18z"/>
+          <path d="M92 132l52 40"/>
+        </g>
+        <g class="r"><rect x="144" y="170" width="74" height="20" fill="currentColor"/></g>
+        <text x="181" y="183.5" text-anchor="middle" style="fill:var(--paper);font-weight:600">K-01 · 5,000</text>
+      </svg>
+      <figcaption class="plan-cap mono muted"><span data-t="figL"></span><span>1:50</span></figcaption>
+    </figure>
+  </header>
 
-  <section>
-    <div class="custom">
-      <div><h3 data-t="cH"></h3><p data-t="cP"></p></div>
-      <a class="btn btn-wa" id="customWa" target="_blank" rel="noopener"></a>
-    </div>
-  </section>
+  <main>
+    <section id="s1">
+      <div class="shead"><span class="no">01</span><h2 data-t="h1"></h2><p data-t="p1"></p></div>
+      <div class="sched">
+        <div class="sched-hd mono muted"><span data-t="colCode"></span><span data-t="colItem"></span><span data-t="colScope"></span><span data-t="colPrice"></span><span></span></div>
+        <div id="pkList"></div>
+      </div>
+    </section>
 
-  <section id="faq">
-    <h2 data-t="fH"></h2>
-    <div id="faqList" style="margin-top:16px"></div>
-  </section>
-</main>
+    <section id="s2">
+      <div class="shead"><span class="no">02</span><h2 data-t="h2"></h2><p data-t="p2"></p></div>
+      <div class="calc">
+        <div class="calc-left">
+          <div class="calc-top">
+            <label class="mono muted" for="area" data-t="areaL"></label>
+            <div class="area"><input id="area" type="number" inputmode="numeric" min="1" max="2000" value="100"><span class="u">m²</span></div>
+          </div>
+          <div class="ruler">
+            <input id="rule" type="range" min="20" max="500" step="5" value="100" aria-label="Area">
+            <div class="ticks"><span>20</span><span>140</span><span>260</span><span>380</span><span>500</span></div>
+          </div>
+        </div>
+        <div id="mList"></div>
+      </div>
+    </section>
 
-<footer class="wrap">
-  <div data-t="brand" style="font-weight:700;color:var(--ink)"></div>
-  <div id="footLinks"></div>
-  <div>© <span id="yr"></span></div>
-</footer>
+    <section id="s3">
+      <div class="shead"><span class="no">03</span><h2 data-t="h3"></h2></div>
+      <ol class="proc" id="proc"></ol>
+    </section>
 
-<!-- checkout sheet -->
-<div class="overlay" id="ov" hidden>
-  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="coTitle">
-    <div class="sheet-h">
-      <div><h3 id="coTitle"></h3><small id="coSub"></small></div>
-      <button class="x" id="coClose" type="button" aria-label="Close">×</button>
-    </div>
-    <form id="coForm" novalidate>
-      <div class="field" id="areaField"><label for="fArea" data-t="fArea"></label><input id="fArea" type="number" inputmode="decimal" min="1" step="1"></div>
-      <div class="field"><label for="fName" data-t="fName"></label><input id="fName" autocomplete="name" required></div>
-      <div class="field"><label for="fPhone" data-t="fPhone"></label><input id="fPhone" type="tel" inputmode="tel" autocomplete="tel" required dir="ltr"></div>
-      <div class="field"><label for="fNotes" data-t="fNotes"></label><textarea id="fNotes"></textarea></div>
-      <div class="err" id="coErr" hidden></div>
-      <div class="sum" id="coSum"></div>
-      <p class="paylabel" data-t="payH"></p>
-      <div class="pay" id="payBox"></div>
-      <p class="note" id="payNote" data-t="payNote"></p>
-      <p class="oid" id="coOid"></p>
+    <section id="s4" hidden>
+      <div class="shead"><span class="no">04</span><h2 data-t="h4"></h2></div>
+      <div class="work" id="work"></div>
+    </section>
+
+    <section id="s5">
+      <div class="shead"><span class="no" id="notesNo">04</span><h2 data-t="h5"></h2></div>
+      <ol class="notes" id="notes"></ol>
+      <div class="custom" style="margin-top:28px">
+        <div><h3 data-t="cH"></h3><p data-t="cP"></p></div>
+        <a class="btn wa" id="customWa" target="_blank" rel="noopener"></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="tblock" id="tblock"></footer>
+</div>
+
+<!-- work order -->
+<div class="wo" id="wo" hidden>
+  <div class="wo-panel" role="dialog" aria-modal="true" aria-labelledby="woTitle">
+    <div class="wo-hd"><span class="mono" id="woNo"></span><button class="x" id="woClose" type="button" data-t="close"></button></div>
+    <span class="mono red" id="woCode"></span>
+    <h3 id="woTitle"></h3>
+    <span class="mono muted" id="woDays"></span>
+    <form id="woForm" novalidate>
+      <label class="fl" id="woAreaF"><span class="mono" data-t="areaL"></span><input id="woArea" type="number" inputmode="numeric" min="1"></label>
+      <label class="fl"><span class="mono" data-t="fName"></span><input id="fName" autocomplete="name"></label>
+      <label class="fl"><span class="mono" data-t="fPhone"></span><input id="fPhone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr"></label>
+      <label class="fl"><span class="mono" data-t="fNotes"></span><textarea id="fNotes"></textarea></label>
+      <div class="err" id="woErr" hidden></div>
+      <div class="lines" id="woLines"></div>
+      <p class="mono payh" data-t="payH"></p>
+      <div class="paybox" id="payBox"></div>
+      <p class="fine" id="payNote" data-t="payNote"></p>
     </form>
   </div>
 </div>
@@ -285,274 +420,245 @@ footer a{color:var(--muted)}
 <script>
 const T = {
   en: {
-    brand: "Bilal Abu Zaina Design House", brandSub: "Interior Design Studio",
-    heroH: "Your design, <em>ordered in 2 minutes</em>",
-    heroP: "Saw a design you liked in my videos? Pick your service, pay online, send your plan — and get your design delivered.",
-    heroCta: "Browse designs", heroCta2: "Price per meter",
-    t1: "Secure payment", t2: "Fast delivery", t3: "Revisions included",
-    pkH: "Design packages", pkP: "Fixed price — order straight away.",
-    mH: "Price per square meter", mP: "Enter your area and see your total instantly.",
-    hH: "How it works", hP: "No waiting for replies — order it yourself.",
-    s1: "Choose your design", s1p: "Pick a package, or enter your area for per-meter services.",
-    s2: "Pay online", s2p: "Pay by card, InstaPay or wallet in a few taps.",
-    s3: "Send your details", s3p: "Send your plan, photos and measurements on WhatsApp with your order number.",
-    s4: "Receive your design", s4p: "Your design arrives within the stated delivery time — revisions included.",
-    cH: "Need something different?", cP: "Full villa, shop, or a custom request — message me directly.",
-    customBtn: "Chat on WhatsApp",
-    fH: "Questions",
-    faq: [
-      ["What do I need to send?", "A plan or a photo of the space with measurements (a hand sketch is fine), plus any reference pictures you like."],
-      ["When does the delivery time start?", "From the moment I receive your payment and all your details."],
-      ["Can I request changes?", "Yes, every package includes a round of revisions. Extra revisions can be added."],
-      ["Do you supply or execute the work?", "These packages are for design only. You get files you can take to any carpenter or contractor."],
-      ["Is there a minimum area?", "Per-meter services have a minimum area shown on each service."]
+    strip: "Bilal Abu Zaina — Design House",
+    name1: "Bilal Abu Zaina", name2: "Design House",
+    lede: "Designs, ordered like products. Choose one, pay, send your plan — we draw the rest.",
+    cta: "See the schedule", figL: "Fig. 1 — Kitchen, plan view",
+    h1: "Schedule of designs", p1: "Fixed price. Order directly.",
+    colCode: "Code", colItem: "Item", colScope: "Scope", colPrice: "Price",
+    h2: "Priced by area", p2: "Set your area on the scale — every price updates.",
+    areaL: "Area (m²)", perM: "{r} / m²", min: "min. {n} m²",
+    deposit: "Pay {p}% now", h3: "Procedure",
+    proc: [["Choose", "A fixed design, or set your area."], ["Pay", "Card, InstaPay or wallet."], ["Send your plan", "Plan, photos and measurements on WhatsApp, with your order number."], ["Receive", "Your drawings, on the stated date. Revisions included."]],
+    h4: "Recent work", h5: "General notes",
+    notes: [
+      ["Measurements are supplied by the client.", "A plan or a hand sketch with dimensions is enough. Site visits are quoted separately."],
+      ["Delivery time starts on receipt of payment and all details.", "Working days, excluding Fridays and public holidays."],
+      ["One round of revisions is included.", "Further revisions are charged per round."],
+      ["Design only.", "You receive files ready for any carpenter or contractor. Supply and execution are not included."],
+      ["Refunds.", "Full refund before work starts. Once drawing has started, the payment is not refundable."],
+      ["Work beyond the stated scope is quoted separately.", "Larger kitchens, extra walls or extra rooms — ask before ordering."]
     ],
-    order: "Order now", days: "Delivery: {n} working days", perM: "/ m²",
-    area: "Area (m²)", total: "Total", minA: "Minimum {n} m²",
-    fromVideo: "From my latest video 🔥",
-    fArea: "Area (m²)", fName: "Your name", fPhone: "Phone / WhatsApp", fNotes: "Notes (optional)",
-    errReq: "Please enter your name and phone number.", errArea: "Please enter the area (minimum {n} m²).",
-    service: "Service", sumArea: "Area", payH: "Choose how to pay",
-    payCard: "Pay by card", payWa: "Order on WhatsApp",
-    instapay: "InstaPay", vcash: "Vodafone Cash", copy: "Copy", copied: "Copied ✓",
-    paidBtn: "I've paid — send my details",
-    payNote: "After paying, send the payment screenshot with your plan and measurements on WhatsApp. Your order number is included automatically.",
-    orderNo: "Order no.",
-    waOrder: "Hello, I'd like to order: {svc}", waPaid: "I've paid", waMethod: "Payment method",
-    waCustom: "Hello, I'd like to ask about a custom design."
+    cH: "Something not on the schedule?", cP: "A full villa, a shop, a custom piece — write to me directly.",
+    wa: "WhatsApp", order: "Order", days: "{n} working days", close: "Close",
+    woNo: "Work order {id}", fName: "Name", fPhone: "Phone / WhatsApp", fNotes: "Notes (optional)",
+    errReq: "Enter your name and phone number.", errArea: "Enter the area — minimum {n} m².",
+    lService: "Item", lArea: "Area", lTotal: "Total", lDue: "Due now", lRest: "Balance on delivery",
+    payH: "Payment", payCard: "Pay by card", payWa: "Send order on WhatsApp",
+    instapay: "InstaPay", vcash: "Vodafone Cash", copy: "Copy", copied: "Copied",
+    paid: "I've paid — send details",
+    payNote: "After paying, send the payment screenshot with your plan on WhatsApp. Your order number is attached automatically.",
+    tStudio: "Studio", tContact: "Contact", tSheet: "Sheet", tDate: "Date",
+    waOrder: "Hello, work order {id}", waMethod: "Payment", waPaid: "paid", waCustom: "Hello, I'd like to ask about a custom design.",
+    latest: "From the latest video"
   },
   ar: {
-    brand: "بلال أبو زينة ديزاين هاوس", brandSub: "استوديو تصميم داخلي",
-    heroH: "اطلب تصميمك <em>في دقيقتين</em>",
-    heroP: "عجبك تصميم في الفيديوهات؟ اختار الخدمة، ادفع أونلاين، وابعت المخطط — والتصميم يوصلك.",
-    heroCta: "شوف التصاميم", heroCta2: "السعر بالمتر",
-    t1: "دفع آمن", t2: "تسليم سريع", t3: "تعديلات مشمولة",
-    pkH: "باقات التصميم", pkP: "سعر ثابت — اطلب على طول.",
-    mH: "السعر بالمتر المربع", mP: "اكتب المساحة وشوف الإجمالي فورًا.",
-    hH: "إزاي تطلب", hP: "من غير ما تستنى رد — اطلب بنفسك.",
-    s1: "اختار التصميم", s1p: "اختار باقة، أو اكتب المساحة للخدمات بالمتر.",
-    s2: "ادفع أونلاين", s2p: "ادفع بالكارت أو إنستاباي أو المحفظة في ثواني.",
-    s3: "ابعت التفاصيل", s3p: "ابعت المخطط والصور والمقاسات على واتساب برقم الطلب.",
-    s4: "استلم تصميمك", s4p: "التصميم يوصلك في مدة التسليم المحددة — والتعديلات مشمولة.",
-    cH: "محتاج حاجة مختلفة؟", cP: "فيلا كاملة، محل، أو طلب خاص — كلمني مباشرة.",
-    customBtn: "كلمني واتساب",
-    fH: "أسئلة شائعة",
-    faq: [
-      ["محتاج أبعت إيه؟", "مخطط أو صورة للمكان بالمقاسات (رسم بإيدك ينفع)، وأي صور مرجعية عاجباك."],
-      ["مدة التسليم بتبدأ امتى؟", "من وقت ما يوصلني الدفع وكل التفاصيل."],
-      ["أقدر أطلب تعديلات؟", "أيوه، كل باقة فيها تعديل مرة. وممكن تضيف تعديلات زيادة."],
-      ["هل بتنفذوا الشغل؟", "الباقات دي تصميم فقط. هتستلم ملفات تقدر تديها لأي نجار أو مقاول."],
-      ["فيه حد أدنى للمساحة؟", "الخدمات بالمتر ليها حد أدنى مكتوب على كل خدمة."]
+    strip: "بلال أبو زينة — ديزاين هاوس",
+    name1: "بلال أبو زينة", name2: "ديزاين هاوس",
+    lede: "اطلب تصميمك زي ما بتطلب أي منتج. اختار، ادفع، ابعت المخطط — والباقي علينا.",
+    cta: "شوف الجدول", figL: "شكل ١ — مطبخ، مسقط أفقي",
+    h1: "جدول التصاميم", p1: "سعر ثابت. اطلب على طول.",
+    colCode: "الكود", colItem: "البند", colScope: "المحتوى", colPrice: "السعر",
+    h2: "بالمساحة", p2: "حرّك المسطرة على مساحتك — كل الأسعار بتتحسب.",
+    areaL: "المساحة (م²)", perM: "{r} / م²", min: "أقل مساحة {n} م²",
+    deposit: "ادفع {p}٪ دلوقتي", h3: "الخطوات",
+    proc: [["اختار", "تصميم بسعر ثابت، أو حدد مساحتك."], ["ادفع", "كارت، إنستاباي أو محفظة."], ["ابعت المخطط", "المخطط والصور والمقاسات على واتساب برقم الطلب."], ["استلم", "الرسومات في الميعاد المحدد. والتعديل مشمول."]],
+    h4: "شغل حديث", h5: "ملاحظات عامة",
+    notes: [
+      ["المقاسات مسؤولية العميل.", "مخطط أو رسم بالإيد بالمقاسات كفاية. المعاينة في الموقع بسعر منفصل."],
+      ["مدة التسليم تبدأ من وصول الدفع وكل التفاصيل.", "أيام عمل، من غير الجمعة والإجازات الرسمية."],
+      ["تعديل واحد مشمول.", "التعديلات الزيادة بتتحسب لكل مرة."],
+      ["تصميم فقط.", "هتستلم ملفات جاهزة لأي نجار أو مقاول. التوريد والتنفيذ مش مشمولين."],
+      ["الاسترجاع.", "استرجاع كامل قبل بداية الشغل. بعد ما الرسم يبدأ، المبلغ مش بيترجع."],
+      ["أي شغل أكبر من المحتوى المكتوب بيتسعّر لوحده.", "مطبخ أكبر، حوائط أو أوض زيادة — اسأل قبل ما تطلب."]
     ],
-    order: "اطلب الآن", days: "التسليم: {n} أيام عمل", perM: "/ م²",
-    area: "المساحة (م²)", total: "الإجمالي", minA: "الحد الأدنى {n} م²",
-    fromVideo: "من آخر فيديو 🔥",
-    fArea: "المساحة (م²)", fName: "الاسم", fPhone: "رقم الموبايل / واتساب", fNotes: "ملاحظات (اختياري)",
-    errReq: "من فضلك اكتب الاسم ورقم الموبايل.", errArea: "من فضلك اكتب المساحة (الحد الأدنى {n} م²).",
-    service: "الخدمة", sumArea: "المساحة", payH: "اختار طريقة الدفع",
-    payCard: "ادفع بالكارت", payWa: "اطلب على واتساب",
-    instapay: "إنستاباي", vcash: "فودافون كاش", copy: "نسخ", copied: "تم النسخ ✓",
-    paidBtn: "دفعت — ابعت التفاصيل",
-    payNote: "بعد الدفع ابعت صورة التحويل مع المخطط والمقاسات على واتساب. رقم الطلب بيتبعت تلقائيًا.",
-    orderNo: "رقم الطلب",
-    waOrder: "أهلاً، عايز أطلب: {svc}", waPaid: "تم الدفع", waMethod: "طريقة الدفع",
-    waCustom: "أهلاً، عايز أسأل عن تصميم خاص."
+    cH: "مش لاقي طلبك في الجدول؟", cP: "فيلا كاملة، محل، أو قطعة خاصة — كلمني مباشرة.",
+    wa: "واتساب", order: "اطلب", days: "{n} أيام عمل", close: "إغلاق",
+    woNo: "أمر شغل {id}", fName: "الاسم", fPhone: "الموبايل / واتساب", fNotes: "ملاحظات (اختياري)",
+    errReq: "اكتب الاسم ورقم الموبايل.", errArea: "اكتب المساحة — أقل حاجة {n} م².",
+    lService: "البند", lArea: "المساحة", lTotal: "الإجمالي", lDue: "المطلوب دلوقتي", lRest: "الباقي عند التسليم",
+    payH: "الدفع", payCard: "ادفع بالكارت", payWa: "ابعت الطلب على واتساب",
+    instapay: "إنستاباي", vcash: "فودافون كاش", copy: "نسخ", copied: "اتنسخ",
+    paid: "دفعت — ابعت التفاصيل",
+    payNote: "بعد الدفع ابعت صورة التحويل مع المخطط على واتساب. رقم الطلب بيتبعت تلقائي.",
+    tStudio: "الاستوديو", tContact: "تواصل", tSheet: "لوحة", tDate: "التاريخ",
+    waOrder: "أهلاً، أمر شغل {id}", waMethod: "الدفع", waPaid: "تم", waCustom: "أهلاً، عايز أسأل عن تصميم خاص.",
+    latest: "من آخر فيديو"
   }
 };
 
-const ICONS = {
-  kitchen:'<rect x="3" y="10" width="18" height="10" rx="1"/><path d="M3 14h18M9 10v10M15 10v10M6 4h4v3H6zM14 4h4v3h-4z"/>',
-  bath:'<path d="M3 12h18v3a5 5 0 01-5 5H8a5 5 0 01-5-5v-3zM6 12V6a2 2 0 014 0M7 20l-1 2M17 20l1 2"/>',
-  tv:'<rect x="5" y="4" width="14" height="9" rx="1"/><path d="M2 16h20v4H2zM8 18h2M14 18h2"/>',
-  wardrobe:'<rect x="4" y="3" width="16" height="18" rx="1"/><path d="M12 3v18M10 11v2M14 11v2"/>',
-  plan:'<path d="M3 3h18v18H3zM3 11h8V3M11 15v6M15 11h6"/>',
-  cube:'<path d="M12 2l9 5v10l-9 5-9-5V7l9-5z"/><path d="M3 7l9 5 9-5M12 12v10"/>',
-  ruler:'<path d="M3 17L17 3l4 4L7 21z"/><path d="M7 13l2 2M10 10l2 2M13 7l2 2"/>'
-};
-const svg = (p, sw=1.8) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
-const CHECK = svg('<path d="M5 12l5 5L20 7"/>', 2.5);
-const WA = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.8 11.9 11.9 0 004.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.4-.2z"/></svg>';
-
-let lang = (() => { try { const s = localStorage.getItem('bazLang'); if (s) return s; } catch(e){}
-  return new URLSearchParams(location.search).get('lang') === 'en' ? 'en' : 'ar'; })();
-const t = (k, vars={}) => String(T[lang][k] ?? k).replace(/\{(\w+)\}/g, (_, v) => vars[v]);
+const $ = id => document.getElementById(id);
+let lang = (() => { const q = new URLSearchParams(location.search).get('lang'); if (q === 'en' || q === 'ar') return q;
+  try { return localStorage.getItem('bazLang') || 'ar'; } catch(e) { return 'ar'; } })();
+let area = 100;
+const t = (k, v={}) => String(T[lang][k] ?? k).replace(/\{(\w+)\}/g, (_, x) => v[x]);
 const L = o => o[lang] ?? o.en;
-const money = n => Math.round(n).toLocaleString(lang === 'ar' ? 'ar-EG' : 'en-US') + ' ' + L(CONFIG.currency);
+const num = n => Math.round(n).toLocaleString('en-US');
+const money = n => num(n) + ' ' + L(CONFIG.currency);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const waLink = text => `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`;
-const areas = {};
+const waLink = s => `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(s)}`;
+const ARR = '<span class="arr flip">→</span>';
+const WA = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.8 11.9 11.9 0 004.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.4-.2z"/></svg>';
 
-function sortedPackages(){
-  const p = CONFIG.packages.slice();
-  const i = p.findIndex(x => x.id === CONFIG.featured);
-  if (i > 0) p.unshift(p.splice(i,1)[0]);
-  return p;
+const pkgs = () => { const p = CONFIG.packages.slice(); const i = p.findIndex(x => x.id === CONFIG.featured); if (i > 0) p.unshift(p.splice(i,1)[0]); return p; };
+const stamp = id => id === CONFIG.featured ? `<span class="stamp">${t('latest')}</span>` : '';
+
+function renderMeter(){
+  $('mList').innerHTML = CONFIG.perMeter.map(m => {
+    const a = Math.max(area || 0, m.min), tot = a * m.rate;
+    return `<div class="mrow" id="${m.id}">${stamp(m.id)}
+      <span class="code">${m.code}</span>
+      <h3>${esc(L(m.name))}</h3>
+      <div class="tot">${money(tot)}<small>${t('perM',{r:num(m.rate)})}</small></div>
+      <p class="d">${esc(L(m.desc))} <span class="mono">· ${t('min',{n:m.min})} · ${t('days',{n:m.days})}</span></p>
+      <div class="act"><button class="order" type="button" data-order="${m.id}">${t('order')} ${ARR}</button>
+        ${m.deposit < 1 ? `<span class="mono muted">${t('deposit',{p:Math.round(m.deposit*100)})} — ${money(tot*m.deposit)}</span>` : ''}</div>
+    </div>`; }).join('');
 }
 
 function render(){
-  document.documentElement.lang = lang;
-  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-  document.getElementById('langBtn').textContent = lang === 'ar' ? 'English' : 'العربية';
-  document.querySelectorAll('[data-t]').forEach(el => {
-    if (el.hasAttribute('data-html')) el.innerHTML = t(el.dataset.t); else el.textContent = t(el.dataset.t);
-  });
-  document.title = t('brand');
+  const h = document.documentElement; h.lang = lang; h.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang));
+  document.querySelectorAll('[data-t]').forEach(el => el.textContent = t(el.dataset.t));
+  document.title = lang === 'ar' ? 'بلال أبو زينة ديزاين هاوس' : 'Bilal Abu Zaina Design House';
 
-  document.getElementById('pkGrid').innerHTML = sortedPackages().map(p => `
-    <article class="card${p.id===CONFIG.featured?' featured':''}" id="${p.id}">
-      ${p.id===CONFIG.featured?`<span class="badge">${t('fromVideo')}</span>`:''}
-      <div class="ic">${svg(ICONS[p.icon])}</div>
-      <h3>${esc(L(p.name))}</h3>
-      <div class="price">${money(p.price)}</div>
-      <div class="meta">${t('days',{n:p.days})}</div>
-      <ul>${L(p.items).map(i=>`<li>${CHECK}<span>${esc(i)}</span></li>`).join('')}</ul>
-      <button class="btn btn-dark" type="button" data-order="${p.id}">${t('order')}</button>
-    </article>`).join('');
+  $('pkList').innerHTML = pkgs().map(p => `
+    <div class="row" id="${p.id}">${stamp(p.id)}
+      <span class="code">${p.code}</span>
+      <h3 class="nm">${esc(L(p.name))}</h3>
+      <p class="sc">${esc(L(p.scope))}</p>
+      <div class="pr">${money(p.price)}<small>${t('days',{n:p.days})}</small></div>
+      <div class="act"><button class="order" type="button" data-order="${p.id}">${t('order')} ${ARR}</button></div>
+    </div>`).join('');
 
-  document.getElementById('mGrid').innerHTML = CONFIG.perMeter.map(m => {
-    const a = areas[m.id] ?? m.min;
-    return `
-    <article class="card${m.id===CONFIG.featured?' featured':''}" id="${m.id}">
-      ${m.id===CONFIG.featured?`<span class="badge">${t('fromVideo')}</span>`:''}
-      <div class="ic">${svg(ICONS[m.icon])}</div>
-      <h3>${esc(L(m.name))}</h3>
-      <div class="price">${money(m.rate)} <small>${t('perM')}</small></div>
-      <div class="meta">${t('days',{n:m.days})}</div>
-      <p class="d">${esc(L(m.desc))}</p>
-      <div class="calc">
-        <label for="a-${m.id}">${t('area')}</label>
-        <input id="a-${m.id}" type="number" inputmode="decimal" min="${m.min}" value="${a}" data-area="${m.id}">
-        <span class="tot" id="tot-${m.id}">${money(Math.max(a,m.min)*m.rate)}</span>
-      </div>
-      <p class="minnote">${t('minA',{n:m.min})}</p>
-      <button class="btn btn-dark" type="button" data-order="${m.id}">${t('order')}</button>
-    </article>`; }).join('');
+  renderMeter();
+  $('proc').innerHTML = T[lang].proc.map(([b,p],i) => `<li><span class="n">0${i+1}</span><div><b>${esc(b)}</b><p>${esc(p)}</p></div></li>`).join('');
+  $('notes').innerHTML = T[lang].notes.map(([b,s]) => `<li><div><b>${esc(b)}</b><span>${esc(s)}</span></div></li>`).join('');
 
-  document.getElementById('faqList').innerHTML = T[lang].faq.map(([q,a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('');
-  const cw = document.getElementById('customWa');
-  cw.href = waLink(t('waCustom')); cw.innerHTML = WA + esc(t('customBtn'));
-  document.getElementById('footLinks').innerHTML = CONFIG.instagram
-    ? `<a href="https://instagram.com/${encodeURIComponent(CONFIG.instagram)}" target="_blank" rel="noopener">@${esc(CONFIG.instagram)}</a>` : '';
-  document.getElementById('yr').textContent = new Date().getFullYear();
+  const hasWork = CONFIG.portfolio.length > 0;
+  $('s4').hidden = !hasWork; $('notesNo').textContent = hasWork ? '05' : '04';
+  if (hasWork) $('work').innerHTML = CONFIG.portfolio.map((w,i) => `<figure><img src="${esc(w.src)}" alt="${esc(L(w))}" loading="lazy"><figcaption class="mono"><span>${esc(L(w))}</span><span class="muted">${String(i+1).padStart(2,'0')}</span></figcaption></figure>`).join('');
+
+  $('customWa').href = waLink(t('waCustom')); $('customWa').innerHTML = WA + `<span>${t('wa')}</span>`;
+  const phone = '+' + CONFIG.whatsapp;
+  $('tblock').innerHTML = `
+    <div class="wide"><span class="k">${t('tStudio')}</span><span class="v big">${esc(t('name1'))}</span><span class="mono muted" style="display:block">${esc(t('name2'))}</span></div>
+    <div><span class="k">${t('tContact')}</span><a class="v" href="https://wa.me/${CONFIG.whatsapp}" target="_blank" rel="noopener" dir="ltr">${phone}</a>${CONFIG.instagram ? `<br><a class="v" href="https://instagram.com/${encodeURIComponent(CONFIG.instagram)}" target="_blank" rel="noopener" dir="ltr">@${esc(CONFIG.instagram)}</a>` : ''}</div>
+    <div><span class="k">${t('tSheet')}</span><span class="v mono">01 / 01</span></div>
+    <div><span class="k">${t('tDate')}</span><span class="v mono">${new Date().getFullYear()}</span></div>`;
+  if (!$('wo').hidden && cur) fillWO();
 }
 
-/* ---------- checkout ---------- */
+/* ---------- work order ---------- */
 let cur = null, oid = '';
-const $ = id => document.getElementById(id);
-const findSvc = id => CONFIG.packages.find(p=>p.id===id) ? {...CONFIG.packages.find(p=>p.id===id), kind:'pkg'}
-  : CONFIG.perMeter.find(p=>p.id===id) ? {...CONFIG.perMeter.find(p=>p.id===id), kind:'m2'} : null;
+const find = id => { const p = CONFIG.packages.find(x => x.id === id); if (p) return {...p, kind:'pkg', deposit:1};
+  const m = CONFIG.perMeter.find(x => x.id === id); return m ? {...m, kind:'m2'} : null; };
+const woArea = () => { const a = parseFloat($('woArea').value); return isFinite(a) ? a : 0; };
+const total = () => cur.kind === 'pkg' ? cur.price : Math.max(woArea(), cur.min) * cur.rate;
+const due = () => total() * (cur.deposit ?? 1);
 
-function amount(){
-  if (!cur) return 0;
-  if (cur.kind === 'pkg') return cur.price;
-  const a = parseFloat($('fArea').value);
-  return (isFinite(a) ? Math.max(a, cur.min) : cur.min) * cur.rate;
+function fillWO(){
+  $('woNo').textContent = t('woNo',{id:oid});
+  $('woCode').textContent = cur.code;
+  $('woTitle').textContent = L(cur.name);
+  $('woDays').textContent = t('days',{n:cur.days});
+  $('woAreaF').hidden = cur.kind !== 'm2';
+  lines(); pay();
 }
-function openCheckout(id){
-  cur = findSvc(id); if (!cur) return;
+function lines(){
+  let h = `<div><span>${t('lService')}</span><span>${cur.code} — ${esc(L(cur.name))}</span></div>`;
+  if (cur.kind === 'm2') h += `<div><span>${t('lArea')}</span><span>${num(Math.max(woArea(),cur.min))} m² × ${num(cur.rate)}</span></div>`;
+  h += `<div><span>${t('lTotal')}</span><span>${money(total())}</span></div>`;
+  if (cur.deposit < 1) h += `<div><span>${t('lRest')}</span><span>${money(total()-due())}</span></div>`;
+  h += `<div class="due"><span>${t('lDue')}</span><span>${money(due())}</span></div>`;
+  $('woLines').innerHTML = h;
+}
+function pay(){
+  let h = '';
+  if (cur.payLink) h += `<button type="button" class="btn" data-pay="card"><span>${t('payCard')} — ${money(due())}</span>${ARR}</button>`;
+  const man = [];
+  if (CONFIG.instapay) man.push(['instapay', CONFIG.instapay]);
+  if (CONFIG.vodafoneCash) man.push(['vcash', CONFIG.vodafoneCash]);
+  if (man.length) h += `<div class="manual">${man.map(([k,v]) => `<div class="r"><span>${t(k)} <code>${esc(v)}</code></span><button type="button" class="cp" data-copy="${esc(v)}">${t('copy')}</button></div>`).join('')}
+    <button type="button" class="btn wa" style="width:100%;justify-content:space-between" data-pay="manual"><span>${t('paid')}</span>${WA}</button></div>`;
+  if (!h) h = `<button type="button" class="btn wa" data-pay="wa"><span>${t('payWa')}</span>${WA}</button>`;
+  $('payBox').innerHTML = h;
+  $('payNote').hidden = !(cur.payLink || man.length);
+}
+function openWO(id){
+  cur = find(id); if (!cur) return;
   oid = 'BAZ-' + Date.now().toString(36).slice(-5).toUpperCase();
-  $('coTitle').textContent = L(cur.name);
-  $('coSub').textContent = t('days',{n:cur.days});
-  $('areaField').hidden = cur.kind !== 'm2';
-  if (cur.kind === 'm2') $('fArea').value = areas[cur.id] ?? cur.min;
-  $('coErr').hidden = true;
-  $('coOid').textContent = `${t('orderNo')}: ${oid}`;
-  updateSum(); renderPay();
-  $('ov').hidden = false; document.body.style.overflow = 'hidden';
-  setTimeout(() => (cur.kind==='m2' ? $('fArea') : $('fName')).focus(), 50);
+  if (cur.kind === 'm2') $('woArea').value = area || cur.min;
+  $('woErr').hidden = true;
+  fillWO();
+  $('wo').hidden = false; document.body.style.overflow = 'hidden';
+  setTimeout(() => $('fName').focus({preventScroll:true}), 60);
 }
-function closeCheckout(){ $('ov').hidden = true; document.body.style.overflow = ''; }
-function updateSum(){
-  let h = `<div><span>${t('service')}</span><span>${esc(L(cur.name))}</span></div>`;
-  if (cur.kind === 'm2') {
-    const a = parseFloat($('fArea').value);
-    h += `<div><span>${t('sumArea')}</span><span>${isFinite(a)?Math.max(a,cur.min):cur.min} m² × ${money(cur.rate)}</span></div>`;
-  }
-  h += `<div class="t"><span>${t('total')}</span><span>${money(amount())}</span></div>`;
-  $('coSum').innerHTML = h;
+function closeWO(){ $('wo').hidden = true; document.body.style.overflow = ''; }
+function valid(){
+  const e = $('woErr');
+  if (cur.kind === 'm2' && woArea() < cur.min) { e.textContent = t('errArea',{n:cur.min}); e.hidden = false; $('woArea').focus(); return false; }
+  if (!$('fName').value.trim() || $('fPhone').value.replace(/\D/g,'').length < 8) { e.textContent = t('errReq'); e.hidden = false; (!$('fName').value.trim() ? $('fName') : $('fPhone')).focus(); return false; }
+  e.hidden = true; return true;
 }
-function renderPay(){
-  const box = $('payBox'); let h = '';
-  if (cur.payLink) h += `<button type="button" class="btn btn-accent" data-pay="card">${svg('<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',2)}${t('payCard')}</button>`;
-  const manual = [];
-  if (CONFIG.instapay) manual.push(['instapay', CONFIG.instapay]);
-  if (CONFIG.vodafoneCash) manual.push(['vcash', CONFIG.vodafoneCash]);
-  if (manual.length) {
-    h += `<div class="manual">${manual.map(([k,v]) => `<div class="row"><span>${t(k)}: <code>${esc(v)}</code></span><button type="button" class="copy" data-copy="${esc(v)}">${t('copy')}</button></div>`).join('')}
-      <button type="button" class="btn btn-wa" style="width:100%;margin-top:8px" data-pay="manual">${WA}${t('paidBtn')}</button></div>`;
-  }
-  if (!h) h = `<button type="button" class="btn btn-wa" data-pay="wa">${WA}${t('payWa')}</button>`;
-  box.innerHTML = h;
-  $('payNote').hidden = !(cur.payLink || manual.length);
-}
-function validate(){
-  const err = $('coErr');
-  if (cur.kind === 'm2') {
-    const a = parseFloat($('fArea').value);
-    if (!isFinite(a) || a < cur.min) { err.textContent = t('errArea',{n:cur.min}); err.hidden = false; $('fArea').focus(); return false; }
-  }
-  if (!$('fName').value.trim() || $('fPhone').value.replace(/\D/g,'').length < 8) {
-    err.textContent = t('errReq'); err.hidden = false; (!$('fName').value.trim() ? $('fName') : $('fPhone')).focus(); return false;
-  }
-  err.hidden = true; return true;
-}
-function orderText(method){
-  const lines = [t('waOrder',{svc:L(cur.name)}), `${t('orderNo')}: ${oid}`];
-  if (cur.kind === 'm2') lines.push(`${t('sumArea')}: ${Math.max(parseFloat($('fArea').value), cur.min)} m²`);
-  lines.push(`${t('total')}: ${money(amount())}`, `${t('fName')}: ${$('fName').value.trim()}`, `${t('fPhone')}: ${$('fPhone').value.trim()}`);
-  if ($('fNotes').value.trim()) lines.push(`${t('fNotes')}: ${$('fNotes').value.trim()}`);
-  if (method) lines.push(`${t('waMethod')}: ${method}`);
-  return lines.join('\n');
+function msg(method){
+  const l = [t('waOrder',{id:oid}), `${t('lService')}: ${cur.code} — ${L(cur.name)}`];
+  if (cur.kind === 'm2') l.push(`${t('lArea')}: ${num(Math.max(woArea(),cur.min))} m²`);
+  l.push(`${t('lTotal')}: ${money(total())}`);
+  if (cur.deposit < 1) l.push(`${t('lDue')}: ${money(due())}`);
+  l.push(`${t('fName')}: ${$('fName').value.trim()}`, `${t('fPhone')}: ${$('fPhone').value.trim()}`);
+  if ($('fNotes').value.trim()) l.push(`${t('fNotes')}: ${$('fNotes').value.trim()}`);
+  if (method) l.push(`${t('waMethod')}: ${method}`);
+  return l.join('\n');
 }
 
+/* ---------- events ---------- */
+function setArea(v, from){
+  area = Math.max(0, Math.min(2000, Math.round(v) || 0));
+  if (from !== 'num') $('area').value = area || '';
+  if (from !== 'rule') $('rule').value = Math.min(500, Math.max(20, area));
+  renderMeter();
+}
+$('area').addEventListener('input', e => setArea(parseFloat(e.target.value), 'num'));
+$('rule').addEventListener('input', e => setArea(parseFloat(e.target.value), 'rule'));
+$('woArea').addEventListener('input', () => { lines(); pay(); });
 document.addEventListener('click', e => {
-  const o = e.target.closest('[data-order]'); if (o) return openCheckout(o.dataset.order);
+  const lb = e.target.closest('[data-lang]');
+  if (lb) { lang = lb.dataset.lang; try { localStorage.setItem('bazLang', lang); } catch(_){} render(); return; }
+  const o = e.target.closest('[data-order]'); if (o) return openWO(o.dataset.order);
   const c = e.target.closest('[data-copy]');
-  if (c) { navigator.clipboard?.writeText(c.dataset.copy).then(() => { c.textContent = t('copied'); setTimeout(()=>c.textContent=t('copy'),1500); }).catch(()=>{}); return; }
+  if (c) { navigator.clipboard?.writeText(c.dataset.copy).then(() => { c.textContent = t('copied'); setTimeout(() => c.textContent = t('copy'), 1500); }).catch(()=>{}); return; }
   const p = e.target.closest('[data-pay]');
   if (p) {
-    if (!validate()) return;
+    if (!valid()) return;
     const k = p.dataset.pay;
     if (k === 'card') {
-      // Card link opens in a new tab; WhatsApp message prepared so they can send details after paying.
       window.open(cur.payLink, '_blank', 'noopener');
-      const wa = $('payBox').querySelector('[data-pay="after"]');
-      if (!wa) p.insertAdjacentHTML('afterend', `<button type="button" class="btn btn-wa" data-pay="after">${WA}${t('paidBtn')}</button>`);
+      if (!$('payBox').querySelector('[data-pay="after"]')) p.insertAdjacentHTML('afterend', `<button type="button" class="btn wa" data-pay="after"><span>${t('paid')}</span>${WA}</button>`);
       return;
     }
-    const method = k === 'after' ? t('payCard') + ' — ' + t('waPaid') : k === 'manual' ? [CONFIG.instapay&&t('instapay'), CONFIG.vodafoneCash&&t('vcash')].filter(Boolean).join(' / ') + ' — ' + t('waPaid') : '';
-    window.open(waLink(orderText(method)), '_blank', 'noopener');
+    const m = k === 'after' ? `${t('payCard')} — ${t('waPaid')}`
+      : k === 'manual' ? [CONFIG.instapay && t('instapay'), CONFIG.vodafoneCash && t('vcash')].filter(Boolean).join(' / ') + ` — ${t('waPaid')}` : '';
+    window.open(waLink(msg(m)), '_blank', 'noopener');
     return;
   }
-  if (e.target === $('ov') || e.target.closest('#coClose')) closeCheckout();
+  if (e.target === $('wo') || e.target.closest('#woClose')) closeWO();
 });
-document.addEventListener('input', e => {
-  const id = e.target.dataset?.area;
-  if (id) { const m = CONFIG.perMeter.find(x=>x.id===id); const a = parseFloat(e.target.value); areas[id] = e.target.value;
-    $('tot-'+id).textContent = money((isFinite(a)?Math.max(a,m.min):m.min)*m.rate); }
-  if (e.target.id === 'fArea' && cur) { areas[cur.id] = e.target.value; updateSum(); }
-});
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('ov').hidden) closeCheckout(); });
-$('coForm').addEventListener('submit', e => e.preventDefault());
-$('langBtn').addEventListener('click', () => {
-  lang = lang === 'ar' ? 'en' : 'ar';
-  try { localStorage.setItem('bazLang', lang); } catch(e){}
-  render(); if (!$('ov').hidden && cur) { $('coTitle').textContent = L(cur.name); $('coSub').textContent = t('days',{n:cur.days}); updateSum(); renderPay(); $('coOid').textContent = `${t('orderNo')}: ${oid}`; }
-});
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('wo').hidden) closeWO(); });
+$('woForm').addEventListener('submit', e => e.preventDefault());
 
-/* Deep link: .../design/#kitchen highlights that card. ?order=kitchen opens checkout directly. */
-function handleHash(){
+/* Deep links: .../design/#kitchen highlights the row; ?order=kitchen opens the work order. */
+function deep(){
   const q = new URLSearchParams(location.search).get('order');
   const id = (q || location.hash.slice(1)).toLowerCase();
   const el = id && document.getElementById(id);
-  if (!el || !el.classList.contains('card')) return;
-  el.scrollIntoView({block:'center'});
-  el.classList.add('flash'); setTimeout(()=>el.classList.remove('flash'), 2200);
-  if (q) openCheckout(id);
+  if (!el || !(el.classList.contains('row') || el.classList.contains('mrow'))) return;
+  el.scrollIntoView({block:'center'}); el.classList.add('hit'); setTimeout(() => el.classList.remove('hit'), 2400);
+  if (q) openWO(id);
 }
 render();
-window.addEventListener('hashchange', handleHash);
-handleHash();
+window.addEventListener('hashchange', deep);
+deep();
 </script>
 </body>
 </html>
