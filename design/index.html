@@ -85,8 +85,15 @@ const CONFIG = {
       desc: { en: "Full 3D design plus execution drawings: electrical, plumbing, ceilings, flooring.", ar: "تصميم 3D كامل مع رسومات تنفيذية: كهرباء، سباكة، أسقف، أرضيات." } }
   ],
 
-  // Your work. Add image paths/URLs, e.g. { src: "work/kitchen-1.jpg", en: "Kitchen, New Cairo", ar: "مطبخ، التجمع" }
-  portfolio: []
+  // Your work, shown near the top. Put images in design/work/.
+  // w/h = image size in pixels; order = design it links to ("Order a design like this").
+  portfolio: [
+    { src: "work/dressing-room-walnut.jpg", w: 958, h: 1120, order: "dressing", en: "Dressing room — walnut, LED shelving", ar: "غرفة ملابس — جوز، إضاءة LED" },
+    { src: "work/kitchen-compact.jpg",      w: 710, h: 920,  order: "kitchen",  en: "Compact kitchen — oak & marble",       ar: "مطبخ صغير — أرو ورخام" },
+    { src: "work/wardrobe-walnut-light.jpg",w: 976, h: 1078, order: "wardrobe", en: "Wardrobe wall with hidden door",       ar: "حائط دواليب بباب مخفي" },
+    { src: "work/kitchen-arch.jpg",         w: 586, h: 1400, order: "kitchen",  en: "Kitchen through the arch",             ar: "مطبخ من ورا القوس" },
+    { src: "work/wardrobe-walnut.jpg",      w: 976, h: 1078, order: "wardrobe", en: "Wardrobe — walnut, full height",       ar: "دولاب — جوز، لحد السقف" }
+  ]
 };
 </script>
 <style>
@@ -236,10 +243,22 @@ html[dir="rtl"] .ruler input{direction:ltr}
 }
 
 /* portfolio */
-.work{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
-.work figure{margin:0;border:1.5px solid var(--rule);padding:8px;background:var(--paper)}
-.work img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;filter:saturate(.92)}
-.work figcaption{display:flex;justify-content:space-between;gap:8px;padding-top:8px}
+.work{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:-16px;padding:0 16px 10px;scrollbar-width:thin}
+.work figure{margin:0;border:1.5px solid var(--rule);padding:8px;background:var(--paper);flex:none;scroll-snap-align:start;display:flex;flex-direction:column;max-width:82vw}
+.work .zoom{display:block;cursor:zoom-in;padding:0}
+.work img{display:block;height:400px;width:auto;max-width:100%;object-fit:cover;background:var(--paper-2)}
+.work figcaption{display:flex;flex-direction:column;gap:2px;padding-top:10px;max-width:min(330px,80vw)}
+.work .cap-t{font-weight:700;font-size:16px;line-height:1.35}
+.work .order{align-self:flex-start;margin-top:6px;font-size:15px}
+@media (min-width:860px){
+  .work{display:block;columns:3;column-gap:16px;overflow:visible;margin:0;padding:0}
+  .work figure{display:flex;break-inside:avoid;margin-bottom:16px;max-width:none}
+  .work img{width:100%;height:auto;max-height:640px;object-fit:cover}
+  .work figcaption{max-width:none}
+}
+.lb{position:fixed;inset:0;z-index:60;background:rgba(10,10,9,.92);display:grid;place-items:center;padding:16px;cursor:zoom-out}
+.lb img{max-width:100%;max-height:calc(100vh - 80px);object-fit:contain;display:block}
+.lb p{color:#efeae1;font-family:var(--mono);font-size:12px;margin:10px 0 0;text-align:center}
 
 /* general notes */
 .notes{margin:0;padding:0;list-style:none;counter-reset:n;columns:1;column-gap:40px}
@@ -383,6 +402,11 @@ html[lang="en"] .credit{text-transform:uppercase;letter-spacing:.06em}
   </header>
 
   <main>
+    <section id="s4" hidden>
+      <div class="shead"><span class="no"></span><h2 data-t="h4"></h2><p data-t="p4"></p></div>
+      <div class="work" id="work"></div>
+    </section>
+
     <section id="s1">
       <div class="shead"><span class="no">01</span><h2 data-t="h1"></h2><p data-t="p1"></p></div>
       <div class="sched">
@@ -421,13 +445,8 @@ html[lang="en"] .credit{text-transform:uppercase;letter-spacing:.06em}
       <ol class="proc" id="proc"></ol>
     </section>
 
-    <section id="s4" hidden>
-      <div class="shead"><span class="no">05</span><h2 data-t="h4"></h2></div>
-      <div class="work" id="work"></div>
-    </section>
-
     <section id="s5">
-      <div class="shead"><span class="no" id="notesNo">05</span><h2 data-t="h5"></h2></div>
+      <div class="shead"><span class="no">05</span><h2 data-t="h5"></h2></div>
       <ol class="notes" id="notes"></ol>
       <div class="custom" style="margin-top:28px">
         <div><h3 data-t="cH"></h3><p data-t="cP"></p></div>
@@ -438,6 +457,8 @@ html[lang="en"] .credit{text-transform:uppercase;letter-spacing:.06em}
 
   <footer class="tblock" id="tblock"></footer>
 </div>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true"><figure style="margin:0"><img id="lbImg" alt=""><p id="lbCap"></p></figure></div>
 
 <!-- work order -->
 <div class="wo" id="wo" hidden>
@@ -484,7 +505,7 @@ const T = {
     areaL: "Area (m²)", perM: "{r} / m²", min: "min. {n} m²",
     deposit: "Pay {p}% now", h3: "Procedure",
     proc: [["Choose & pay 50%", "Pick a design, pay the deposit by InstaPay and send the screenshot."], ["Send your plan", "Plan, photos and measurements on WhatsApp, with your order number."], ["Preview", "When the work is ready you get a private link to see it — locked and pixelated."], ["Pay the rest, download", "Pay the balance and the full files unlock for download."]],
-    h4: "Recent work", h5: "General notes",
+    h4: "Recent work", p4: "Renders from recent projects. Like one? Order the same design.", fig: "Fig. {n}", likeThis: "Order a design like this", h5: "General notes",
     notes: [
       ["Measurements are supplied by the client.", "A plan or a hand sketch with dimensions is enough. Site visits are quoted separately."],
       ["Delivery time starts on receipt of payment and all details.", "Working days, excluding Fridays and public holidays."],
@@ -524,7 +545,7 @@ const T = {
     areaL: "المساحة (م²)", perM: "{r} / م²", min: "أقل مساحة {n} م²",
     deposit: "ادفع {p}٪ دلوقتي", h3: "الخطوات",
     proc: [["اختار وادفع ٥٠٪", "اختار التصميم، ادفع العربون بإنستاباي وابعت صورة التحويل."], ["ابعت المخطط", "المخطط والصور والمقاسات على واتساب برقم الطلب."], ["معاينة", "لما الشغل يخلص هيوصلك لينك خاص تشوفه — مقفول ومش واضح."], ["ادفع الباقي ونزّل", "ادفع الباقي والملفات الكاملة تتفتح للتحميل."]],
-    h4: "شغل حديث", h5: "ملاحظات عامة",
+    h4: "شغل حديث", p4: "صور من مشاريع حديثة. عجبك تصميم؟ اطلب زيه.", fig: "شكل {n}", likeThis: "اطلب تصميم زي ده", h5: "ملاحظات عامة",
     notes: [
       ["المقاسات مسؤولية العميل.", "مخطط أو رسم بالإيد بالمقاسات كفاية. المعاينة في الموقع بسعر منفصل."],
       ["مدة التسليم تبدأ من وصول الدفع وكل التفاصيل.", "أيام عمل، من غير الجمعة والإجازات الرسمية."],
@@ -609,8 +630,15 @@ function render(){
   $('notes').innerHTML = T[lang].notes.map(([b,s]) => `<li><div><b>${esc(b)}</b><span>${esc(s)}</span></div></li>`).join('');
 
   const hasWork = CONFIG.portfolio.length > 0;
-  $('s4').hidden = !hasWork; $('notesNo').textContent = hasWork ? '06' : '05';
-  if (hasWork) $('work').innerHTML = CONFIG.portfolio.map((w,i) => `<figure><img src="${esc(w.src)}" alt="${esc(L(w))}" loading="lazy"><figcaption class="mono"><span>${esc(L(w))}</span><span class="muted">${String(i+1).padStart(2,'0')}</span></figcaption></figure>`).join('');
+  $('s4').hidden = !hasWork;
+  if (hasWork) $('work').innerHTML = CONFIG.portfolio.map((w,i) => {
+    const pk = CONFIG.packages.find(p => p.id === w.order && p.price != null);
+    return `<figure>
+      <button type="button" class="zoom" data-zoom="${i}" aria-label="${esc(L(w))}"><img src="${esc(w.src)}" alt="${esc(L(w))}" width="${w.w}" height="${w.h}" loading="${i < 2 ? 'eager' : 'lazy'}" decoding="async"></button>
+      <figcaption><span class="mono muted">${t('fig',{n:i+2})}</span><span class="cap-t">${esc(L(w))}</span>
+        ${pk ? `<button class="order" type="button" data-order="${pk.id}">${t('likeThis')} <span class="mono">${pk.code}</span> ${ARR}</button>` : ''}</figcaption>
+    </figure>`; }).join('');
+  document.querySelectorAll('main section:not([hidden]) .shead .no').forEach((el, i) => el.textContent = String(i + 1).padStart(2, '0'));
 
   $('customWa').href = waLink(t('waCustom')); $('customWa').innerHTML = WA + `<span>${t('wa')}</span>`;
   const phone = '+' + CONFIG.whatsapp;
@@ -717,6 +745,9 @@ document.addEventListener('change', e => { if (e.target.id === 'shot') { const f
 document.addEventListener('click', e => {
   const lb = e.target.closest('[data-lang]');
   if (lb) { lang = lb.dataset.lang; try { localStorage.setItem('bazLang', lang); } catch(_){} render(); return; }
+  const z = e.target.closest('[data-zoom]');
+  if (z) { const w = CONFIG.portfolio[+z.dataset.zoom]; $('lbImg').src = w.src; $('lbImg').alt = L(w); $('lbCap').textContent = L(w); $('lb').hidden = false; return; }
+  if (e.target.closest('#lb')) { $('lb').hidden = true; return; }
   const o = e.target.closest('[data-order]'); if (o) return openWO(o.dataset.order);
   const c = e.target.closest('[data-copy]');
   if (c) { navigator.clipboard?.writeText(c.dataset.copy).then(() => { c.textContent = t('copied'); setTimeout(() => c.textContent = t('copy'), 1500); }).catch(()=>{}); return; }
@@ -741,7 +772,7 @@ document.addEventListener('click', e => {
   }
   if (e.target === $('wo') || e.target.closest('#woClose')) closeWO();
 });
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('wo').hidden) closeWO(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { if (!$('lb').hidden) $('lb').hidden = true; else if (!$('wo').hidden) closeWO(); } });
 $('woForm').addEventListener('submit', e => e.preventDefault());
 
 /* Deep links: .../design/#kitchen highlights the row; ?order=kitchen opens the work order. */
