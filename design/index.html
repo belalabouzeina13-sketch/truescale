@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Bilal Abu Zaina Design House</title>
-<meta name="description" content="Kitchens, bathrooms, TV units, 2D & 3D design per meter, technical drawings — order and pay online.">
+<meta name="description" content="Interior design and execution — kitchens, dressing rooms, bathrooms, finishing works. Order your design online; free when we build it.">
 <meta property="og:title" content="Bilal Abu Zaina Design House">
 <meta property="og:description" content="Designs, ordered like products. Choose, pay, send your plan.">
 <meta name="theme-color" content="#efeae1">
@@ -33,7 +33,7 @@ const CONFIG = {
 
   // Fixed-price designs. price: null hides a design from the page. payLink = card payment link (Paymob / Kashier / Fawry), optional.
   packages: [
-    { id: "kitchen", code: "K-01", price: 2500, days: 5, payLink: "",
+    { id: "kitchen", code: "K-01", price: 2500, days: 5, payLink: "", credit: true,
       name:  { en: "Kitchen", ar: "مطبخ" },
       scope: { en: "Up to 4 m of cabinets · 3D renders · layout & elevations with dimensions · 1 revision.",
                ar: "حتى ٤ متر وحدات · صور 3D · توزيع وواجهات بالمقاسات · تعديل واحد." } },
@@ -49,10 +49,27 @@ const CONFIG = {
       name:  { en: "Wardrobe", ar: "دولاب" },
       scope: { en: "One wardrobe · 3D render · inside layout & execution drawing with dimensions · 1 revision.",
                ar: "دولاب واحد · صورة 3D · تقسيم داخلي ورسم تنفيذي بالمقاسات · تعديل واحد." } },
-    { id: "dressing", code: "D-01", price: 3000, days: 4, payLink: "",
+    { id: "dressing", code: "D-01", price: 3000, days: 4, payLink: "", credit: true,
       name:  { en: "Dressing Room", ar: "غرفة ملابس" },
       scope: { en: "Up to 3 walls · 3D renders · shelving layout with dimensions · 1 revision.",
                ar: "حتى ٣ حوائط · صور 3D · توزيع الأرفف بالمقاسات · تعديل واحد." } }
+  ],
+
+  // Execution (no online price — client requests a site visit).
+  // credit: true = the design fee for this item is deducted from the execution price.
+  execution: [
+    { id: "exec-finishing", code: "X-FN", credit: false,
+      name: { en: "Finishing Works", ar: "تشطيبات" },
+      desc: { en: "Full apartment and villa finishing: plastering, electrical, plumbing, flooring, ceilings, paint.",
+              ar: "تشطيب شقق وفيلات كامل: محارة، كهرباء، سباكة، أرضيات، أسقف، دهانات." } },
+    { id: "exec-kitchen", code: "X-KT", credit: true,
+      name: { en: "Kitchens", ar: "تنفيذ مطابخ" },
+      desc: { en: "Manufactured to your design, delivered and installed.",
+              ar: "تصنيع حسب تصميمك، توريد وتركيب." } },
+    { id: "exec-dressing", code: "X-DR", credit: true,
+      name: { en: "Dressing Rooms", ar: "تنفيذ غرف ملابس" },
+      desc: { en: "Manufactured to your design, delivered and installed.",
+              ar: "تصنيع حسب تصميمك، توريد وتركيب." } }
   ],
 
   // Per-square-meter work. Client sets the area, total = area × rate.
@@ -85,6 +102,7 @@ const CONFIG = {
 :root[data-theme="dark"]{--paper:#0f2a44;--paper-2:#123252;--ink:#e6eef6;--ink-2:#9fb6cc;--rule:rgba(230,238,246,.8);--hair:rgba(230,238,246,.18);--grid:rgba(230,238,246,.06);--red:#ff8a6b;--on-ink:#0f2a44;color-scheme:dark}
 
 *{box-sizing:border-box;border-radius:0}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{margin:0;color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
   background-color:var(--paper);
@@ -285,6 +303,10 @@ html[lang="en"] .wo h3{font-stretch:115%;text-transform:uppercase}
 .manual code{font-family:var(--mono);font-weight:600;direction:ltr;unicode-bidi:embed}
 .manual .cp{font-family:var(--mono);font-size:12px;font-weight:600;border-bottom:1.5px solid var(--ink);padding:2px 0}
 .manual .btn{margin-top:12px}
+.credit{display:block;margin-top:8px;color:var(--red);font-family:var(--mono);font-size:12px;font-weight:600}
+html[lang="en"] .credit{text-transform:uppercase;letter-spacing:.06em}
+.credit-note{border:1.5px solid var(--red);color:var(--red);padding:10px 12px;font-weight:700;margin:0 0 12px;font-size:15px}
+.row .pr.q{font-size:14px;font-weight:500;color:var(--ink-2);white-space:normal}
 .shot{display:block;margin-top:12px;border:1.5px dashed var(--ink);padding:12px;text-align:center;cursor:pointer}
 .shot input{position:absolute;opacity:0;width:1px;height:1px}
 .shot:focus-within{outline:2px solid var(--red)}
@@ -385,18 +407,26 @@ html[lang="en"] .wo h3{font-stretch:115%;text-transform:uppercase}
       </div>
     </section>
 
+    <section id="sx">
+      <div class="shead"><span class="no">03</span><h2 data-t="hEx"></h2><p data-t="pEx"></p></div>
+      <div class="sched">
+        <div class="sched-hd mono muted"><span data-t="colCode"></span><span data-t="colItem"></span><span data-t="colScope"></span><span data-t="colPrice"></span><span></span></div>
+        <div id="exList"></div>
+      </div>
+    </section>
+
     <section id="s3">
-      <div class="shead"><span class="no">03</span><h2 data-t="h3"></h2></div>
+      <div class="shead"><span class="no">04</span><h2 data-t="h3"></h2></div>
       <ol class="proc" id="proc"></ol>
     </section>
 
     <section id="s4" hidden>
-      <div class="shead"><span class="no">04</span><h2 data-t="h4"></h2></div>
+      <div class="shead"><span class="no">05</span><h2 data-t="h4"></h2></div>
       <div class="work" id="work"></div>
     </section>
 
     <section id="s5">
-      <div class="shead"><span class="no" id="notesNo">04</span><h2 data-t="h5"></h2></div>
+      <div class="shead"><span class="no" id="notesNo">05</span><h2 data-t="h5"></h2></div>
       <ol class="notes" id="notes"></ol>
       <div class="custom" style="margin-top:28px">
         <div><h3 data-t="cH"></h3><p data-t="cP"></p></div>
@@ -417,12 +447,19 @@ html[lang="en"] .wo h3{font-stretch:115%;text-transform:uppercase}
     <span class="mono muted" id="woDays"></span>
     <form id="woForm" novalidate>
       <label class="fl" id="woAreaF"><span class="mono" data-t="areaL"></span><input id="woArea" type="number" inputmode="numeric" min="1"></label>
+      <label class="fl" id="woLocF" hidden><span class="mono" data-t="fLoc"></span><input id="fLoc" autocomplete="address-level2"></label>
       <label class="fl"><span class="mono" data-t="fName"></span><input id="fName" autocomplete="name"></label>
       <label class="fl"><span class="mono" data-t="fPhone"></span><input id="fPhone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr"></label>
       <label class="fl"><span class="mono" data-t="fNotes"></span><textarea id="fNotes"></textarea></label>
       <div class="err" id="woErr" hidden></div>
+      <label class="fl" id="woRefF" hidden><span class="mono" data-t="fRef"></span><input id="fRef" placeholder="BAZ-XXXXX" dir="ltr" spellcheck="false"></label>
+      <div id="execBox" hidden style="margin-top:24px">
+        <p class="credit-note" id="exCredit" data-t="exCredit"></p>
+        <button type="button" class="btn wa" style="width:100%;justify-content:space-between" data-pay="exec"><span data-t="exSend"></span><span id="exWa"></span></button>
+        <p class="fine" data-t="exNote"></p>
+      </div>
       <div class="lines" id="woLines"></div>
-      <p class="mono payh" data-t="payH"></p>
+      <p class="mono payh" id="payH" data-t="payH"></p>
       <div class="paybox" id="payBox"></div>
       <p class="fine" id="payNote" data-t="payNote"></p>
     </form>
@@ -434,7 +471,11 @@ const T = {
   en: {
     strip: "Bilal Abu Zaina — Design House",
     name1: "Bilal Abu Zaina", name2: "Design House",
-    lede: "Designs, ordered like products. Choose one, pay, send your plan — we draw the rest.",
+    lede: "Design and execution. Order your design online in two minutes — and if we build your kitchen or dressing room, the design is free.",
+    hEx: "Execution", pEx: "We build it too. Priced after a site visit.", visit: "Priced after site visit", reqVisit: "Request a site visit",
+    credit: "Design free if we build it", fLoc: "Location (city / area)", fRef: "Design order no. (if you have one)", areaOpt: "Approx. area (m², optional)",
+    exSend: "Send request on WhatsApp", exCredit: "Ordered the design from us? Its fee is deducted from the execution price.",
+    exNote: "We'll contact you to book the site visit and send a quote.", waExec: "Hello, execution request {id}", lLoc: "Location", lRef: "Design order", errLoc: "Enter your location.",
     cta: "See the schedule", figL: "Fig. 1 — Kitchen, plan view",
     h1: "Schedule of designs", p1: "Fixed price. Order directly.",
     colCode: "Code", colItem: "Item", colScope: "Scope", colPrice: "Price",
@@ -447,7 +488,8 @@ const T = {
       ["Measurements are supplied by the client.", "A plan or a hand sketch with dimensions is enough. Site visits are quoted separately."],
       ["Delivery time starts on receipt of payment and all details.", "Working days, excluding Fridays and public holidays."],
       ["One round of revisions is included.", "Further revisions are charged per round."],
-      ["Design only.", "You receive files ready for any carpenter or contractor. Supply and execution are not included."],
+      ["Design packages cover design only.", "You receive files ready for any carpenter or contractor. Execution is quoted separately after a site visit."],
+      ["The design is free when we build it.", "Order a kitchen or dressing room design, then execute it with us — the design fee is deducted from the execution price."],
       ["Refunds.", "Full refund before work starts. Once drawing has started, the deposit is not refundable."],
       ["Final files are released on full payment.", "You can preview the finished work first; downloads unlock once the balance is paid."],
       ["Work beyond the stated scope is quoted separately.", "Larger kitchens, extra walls or extra rooms — ask before ordering."]
@@ -469,7 +511,11 @@ const T = {
   ar: {
     strip: "بلال أبو زينة — ديزاين هاوس",
     name1: "بلال أبو زينة", name2: "ديزاين هاوس",
-    lede: "اطلب تصميمك زي ما بتطلب أي منتج. اختار، ادفع، ابعت المخطط — والباقي علينا.",
+    lede: "تصميم وتنفيذ. اطلب تصميمك أونلاين في دقيقتين — ولو نفّذنا مطبخك أو غرفة الملابس، التصميم ببلاش.",
+    hEx: "التنفيذ", pEx: "وبننفّذ كمان. السعر بعد المعاينة.", visit: "السعر بعد المعاينة", reqVisit: "اطلب معاينة",
+    credit: "التصميم ببلاش لو نفّذنا", fLoc: "المكان (المدينة / المنطقة)", fRef: "رقم طلب التصميم (لو عندك)", areaOpt: "المساحة تقريباً (م²، اختياري)",
+    exSend: "ابعت الطلب واتساب", exCredit: "طلبت التصميم مننا؟ تمنه بيتخصم من سعر التنفيذ.",
+    exNote: "هنتواصل معاك نحدد ميعاد المعاينة ونبعتلك عرض السعر.", waExec: "أهلاً، طلب تنفيذ {id}", lLoc: "المكان", lRef: "طلب التصميم", errLoc: "اكتب مكانك.",
     cta: "شوف الجدول", figL: "شكل ١ — مطبخ، مسقط أفقي",
     h1: "جدول التصاميم", p1: "سعر ثابت. اطلب على طول.",
     colCode: "الكود", colItem: "البند", colScope: "المحتوى", colPrice: "السعر",
@@ -482,7 +528,8 @@ const T = {
       ["المقاسات مسؤولية العميل.", "مخطط أو رسم بالإيد بالمقاسات كفاية. المعاينة في الموقع بسعر منفصل."],
       ["مدة التسليم تبدأ من وصول الدفع وكل التفاصيل.", "أيام عمل، من غير الجمعة والإجازات الرسمية."],
       ["تعديل واحد مشمول.", "التعديلات الزيادة بتتحسب لكل مرة."],
-      ["تصميم فقط.", "هتستلم ملفات جاهزة لأي نجار أو مقاول. التوريد والتنفيذ مش مشمولين."],
+      ["باقات التصميم للتصميم فقط.", "هتستلم ملفات جاهزة لأي نجار أو مقاول. التنفيذ بيتسعّر لوحده بعد المعاينة."],
+      ["التصميم ببلاش لو نفّذنا.", "اطلب تصميم مطبخ أو غرفة ملابس، ونفّذه معانا — تمن التصميم بيتخصم من سعر التنفيذ."],
       ["الاسترجاع.", "استرجاع كامل قبل بداية الشغل. بعد ما الرسم يبدأ، العربون مش بيترجع."],
       ["الملفات النهائية بتتسلم بعد الدفع الكامل.", "تقدر تعاين الشغل الأول؛ والتحميل بيتفتح بعد دفع الباقي."],
       ["أي شغل أكبر من المحتوى المكتوب بيتسعّر لوحده.", "مطبخ أكبر، حوائط أو أوض زيادة — اسأل قبل ما تطلب."]
@@ -543,18 +590,25 @@ function render(){
     <div class="row" id="${p.id}">${stamp(p.id)}
       <span class="code">${p.code}</span>
       <h3 class="nm">${esc(L(p.name))}</h3>
-      <p class="sc">${esc(L(p.scope))}</p>
-      <div class="pr">${money(p.price)}<small>${t('days',{n:p.days})}</small></div>
-      <div class="act"><button class="order" type="button" data-order="${p.id}">${t('order')} ${ARR}</button>
-        ${dep(p) < 1 ? `<span class="mono muted">${t('deposit',{p:Math.round(dep(p)*100)})} — ${money(p.price*dep(p))}</span>` : ''}</div>
+      <p class="sc">${esc(L(p.scope))}${p.credit ? `<span class="credit">${t('credit')}</span>` : ''}</p>
+      <div class="pr">${money(p.price)}<small>${t('days',{n:p.days})}</small>${dep(p) < 1 ? `<small>${t('deposit',{p:Math.round(dep(p)*100)})}: ${num(p.price*dep(p))}</small>` : ''}</div>
+      <div class="act"><button class="order" type="button" data-order="${p.id}">${t('order')} ${ARR}</button></div>
     </div>`).join('');
 
+  $('exList').innerHTML = CONFIG.execution.map(x => `
+    <div class="row" id="${x.id}">
+      <span class="code">${x.code}</span>
+      <h3 class="nm">${esc(L(x.name))}</h3>
+      <p class="sc">${esc(L(x.desc))}${x.credit ? `<span class="credit">${t('credit')}</span>` : ''}</p>
+      <div class="pr q">${t('visit')}</div>
+      <div class="act"><button class="order" type="button" data-order="${x.id}">${t('reqVisit')} ${ARR}</button></div>
+    </div>`).join('');
   renderMeter();
   $('proc').innerHTML = T[lang].proc.map(([b,p],i) => `<li><span class="n">0${i+1}</span><div><b>${esc(b)}</b><p>${esc(p)}</p></div></li>`).join('');
   $('notes').innerHTML = T[lang].notes.map(([b,s]) => `<li><div><b>${esc(b)}</b><span>${esc(s)}</span></div></li>`).join('');
 
   const hasWork = CONFIG.portfolio.length > 0;
-  $('s4').hidden = !hasWork; $('notesNo').textContent = hasWork ? '05' : '04';
+  $('s4').hidden = !hasWork; $('notesNo').textContent = hasWork ? '06' : '05';
   if (hasWork) $('work').innerHTML = CONFIG.portfolio.map((w,i) => `<figure><img src="${esc(w.src)}" alt="${esc(L(w))}" loading="lazy"><figcaption class="mono"><span>${esc(L(w))}</span><span class="muted">${String(i+1).padStart(2,'0')}</span></figcaption></figure>`).join('');
 
   $('customWa').href = waLink(t('waCustom')); $('customWa').innerHTML = WA + `<span>${t('wa')}</span>`;
@@ -570,6 +624,7 @@ function render(){
 /* ---------- work order ---------- */
 let cur = null, oid = '';
 const find = id => { const p = CONFIG.packages.find(x => x.id === id); if (p) return {...p, kind:'pkg', deposit: p.deposit ?? CONFIG.deposit};
+  const x = CONFIG.execution.find(e => e.id === id); if (x) return {...x, kind:'exec'};
   const m = CONFIG.perMeter.find(x => x.id === id); return m ? {...m, kind:'m2', deposit: m.deposit ?? CONFIG.deposit} : null; };
 const woArea = () => { const a = parseFloat($('woArea').value); return isFinite(a) ? a : 0; };
 const total = () => cur.kind === 'pkg' ? cur.price : Math.max(woArea(), cur.min) * cur.rate;
@@ -579,8 +634,14 @@ function fillWO(){
   $('woNo').textContent = t('woNo',{id:oid});
   $('woCode').textContent = cur.code;
   $('woTitle').textContent = L(cur.name);
-  $('woDays').textContent = t('days',{n:cur.days});
-  $('woAreaF').hidden = cur.kind !== 'm2';
+  const ex = cur.kind === 'exec';
+  $('woDays').textContent = ex ? t('visit') : t('days',{n:cur.days});
+  $('woAreaF').hidden = cur.kind === 'pkg';
+  $('woAreaF').querySelector('.mono').textContent = ex ? t('areaOpt') : t('areaL');
+  $('woLocF').hidden = $('woRefF').hidden = !ex;
+  $('execBox').hidden = !ex; $('exCredit').hidden = !cur.credit; $('exWa').innerHTML = WA;
+  ['woLines','payH','payBox','payNote'].forEach(i => $(i).hidden = ex);
+  if (ex) return;
   lines(); pay();
 }
 function lines(){
@@ -608,7 +669,7 @@ function pay(){
 function openWO(id){
   cur = find(id); if (!cur) return;
   oid = 'BAZ-' + Date.now().toString(36).slice(-5).toUpperCase();
-  if (cur.kind === 'm2') $('woArea').value = area || cur.min;
+  $('woArea').value = cur.kind === 'm2' ? (area || cur.min) : '';
   $('woErr').hidden = true;
   fillWO();
   $('wo').hidden = false; document.body.style.overflow = 'hidden';
@@ -618,10 +679,19 @@ function closeWO(){ $('wo').hidden = true; document.body.style.overflow = ''; }
 function valid(){
   const e = $('woErr');
   if (cur.kind === 'm2' && woArea() < cur.min) { e.textContent = t('errArea',{n:cur.min}); e.hidden = false; $('woArea').focus(); return false; }
+  if (cur.kind === 'exec' && !$('fLoc').value.trim()) { e.textContent = t('errLoc'); e.hidden = false; $('fLoc').focus(); return false; }
   if (!$('fName').value.trim() || $('fPhone').value.replace(/\D/g,'').length < 8) { e.textContent = t('errReq'); e.hidden = false; (!$('fName').value.trim() ? $('fName') : $('fPhone')).focus(); return false; }
   e.hidden = true; return true;
 }
 function msg(method){
+  if (cur.kind === 'exec') {
+    const l = [t('waExec',{id:oid}), `${t('lService')}: ${cur.code} — ${L(cur.name)}`, `${t('lLoc')}: ${$('fLoc').value.trim()}`];
+    if (woArea() > 0) l.push(`${t('lArea')}: ${num(woArea())} m²`);
+    if ($('fRef').value.trim()) l.push(`${t('lRef')}: ${$('fRef').value.trim()}`);
+    l.push(`${t('fName')}: ${$('fName').value.trim()}`, `${t('fPhone')}: ${$('fPhone').value.trim()}`);
+    if ($('fNotes').value.trim()) l.push(`${t('fNotes')}: ${$('fNotes').value.trim()}`);
+    return l.join('\n');
+  }
   const l = [t('waOrder',{id:oid}), `${t('lService')}: ${cur.code} — ${L(cur.name)}`];
   if (cur.kind === 'm2') l.push(`${t('lArea')}: ${num(Math.max(woArea(),cur.min))} m²`);
   l.push(`${t('lTotal')}: ${money(total())}`);
@@ -641,7 +711,7 @@ function setArea(v, from){
 }
 $('area').addEventListener('input', e => setArea(parseFloat(e.target.value), 'num'));
 $('rule').addEventListener('input', e => setArea(parseFloat(e.target.value), 'rule'));
-$('woArea').addEventListener('input', () => { lines(); pay(); });
+$('woArea').addEventListener('input', () => { if (cur && cur.kind !== 'exec') { lines(); pay(); } });
 document.addEventListener('change', e => { if (e.target.id === 'shot') { const f = e.target.files[0]; $('shotL').textContent = f ? '✓ ' + f.name : t('attach'); $('woErr').hidden = true; } });
 document.addEventListener('click', e => {
   const lb = e.target.closest('[data-lang]');
