@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bilal Abu Zaina Design House</title>
+<meta name="description" content="Order your interior design online — kitchens, bathrooms, TV units, 2D & 3D design per meter, technical drawings.">
+<meta property="og:title" content="Bilal Abu Zaina Design House">
+<meta property="og:description" content="Pick your design, pay online, get it delivered.">
+<meta name="theme-color" content="#2c3946">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script>
+/* =====================================================================
+   EDIT THIS BLOCK ONLY — prices, contact details, payment links.
+   ===================================================================== */
+const CONFIG = {
+  // WhatsApp number in international format, digits only (Egypt: 20 + number without the first 0)
+  whatsapp: "201000000000",
+  instagram: "",                       // e.g. "bilalabouzeina" (shown in footer)
+
+  // Manual payment options shown at checkout. Leave "" to hide one.
+  instapay: "",                        // e.g. "bilal@instapay"
+  vodafoneCash: "",                    // e.g. "01000000000"
+
+  // Which package gets the "From my latest video" badge and goes first.
+  // Change it whenever a video goes viral: "kitchen", "bathroom", "tv", "dressing" ...
+  featured: "kitchen",
+
+  currency: { en: "EGP", ar: "ج.م" },
+
+  // Fixed-price packages. payLink = card payment link from Paymob / Kashier / Fawry (optional).
+  packages: [
+    { id: "kitchen", icon: "kitchen", price: 5000, days: 5, payLink: "",
+      name: { en: "Kitchen Design", ar: "تصميم مطبخ" },
+      items: {
+        en: ["Full 3D design with realistic renders", "Layout & cabinet plan", "Materials & colors selection", "Elevations with dimensions for the carpenter", "1 round of revisions"],
+        ar: ["تصميم 3D كامل بصور واقعية", "توزيع المطبخ وخطة الوحدات", "اختيار الخامات والألوان", "واجهات بالمقاسات للنجار", "تعديل مرة واحدة"] } },
+    { id: "bathroom", icon: "bath", price: 3500, days: 4, payLink: "",
+      name: { en: "Bathroom Design", ar: "تصميم حمام" },
+      items: {
+        en: ["3D design with realistic renders", "Tiles layout & wall elevations", "Sanitary ware & fixtures placement", "1 round of revisions"],
+        ar: ["تصميم 3D بصور واقعية", "توزيع السيراميك وواجهات الحوائط", "أماكن الأدوات الصحية", "تعديل مرة واحدة"] } },
+    { id: "tv", icon: "tv", price: 2500, days: 3, payLink: "",
+      name: { en: "TV Unit Design", ar: "تصميم وحدة تليفزيون" },
+      items: {
+        en: ["3D design of the TV wall", "Detailed drawing with dimensions", "Lighting & materials suggestions", "1 round of revisions"],
+        ar: ["تصميم 3D لحائط التليفزيون", "رسم تنفيذي بالمقاسات", "اقتراح الإضاءة والخامات", "تعديل مرة واحدة"] } },
+    { id: "dressing", icon: "wardrobe", price: 3000, days: 4, payLink: "",
+      name: { en: "Dressing Room Design", ar: "تصميم غرفة ملابس" },
+      items: {
+        en: ["3D design with realistic renders", "Shelving & hanging layout", "Drawings with dimensions", "1 round of revisions"],
+        ar: ["تصميم 3D بصور واقعية", "توزيع الأرفف والشماعات", "رسومات بالمقاسات", "تعديل مرة واحدة"] } }
+  ],
+
+  // Per-square-meter services. Client types the area, total is calculated.
+  perMeter: [
+    { id: "2d", icon: "plan", rate: 150, min: 50, days: 5, payLink: "",
+      name: { en: "2D Layout Design", ar: "تصميم 2D (توزيع)" },
+      desc: { en: "Furniture layout plan for your whole apartment or villa.", ar: "توزيع الأثاث للشقة أو الفيلا بالكامل." } },
+    { id: "3d", icon: "cube", rate: 350, min: 50, days: 10, payLink: "",
+      name: { en: "3D Interior Design", ar: "تصميم 3D داخلي" },
+      desc: { en: "Full 3D design with realistic renders for every room.", ar: "تصميم 3D كامل بصور واقعية لكل الغرف." } },
+    { id: "tech", icon: "ruler", rate: 200, min: 50, days: 7, payLink: "",
+      name: { en: "Technical Drawings", ar: "رسومات تنفيذية" },
+      desc: { en: "Execution drawings: electrical, plumbing, ceilings, flooring.", ar: "رسومات تنفيذية: كهرباء، سباكة، أسقف، أرضيات." } }
+  ]
+};
+</script>
+<style>
+:root{
+  --brand:#2c3946;--brand-2:#3b4a5a;--accent:#c8a46a;--accent-ink:#1d1a14;
+  --bg:#f4f1ec;--surface:#ffffff;--surface-2:#f8f6f2;--ink:#1f242a;--muted:#646b74;--line:#e4dfd6;
+  --ok:#2f7d4f;--hot:#c2532d;--shadow:0 1px 2px rgba(20,25,30,.06),0 8px 24px rgba(20,25,30,.06);
+  --font:"Cairo",system-ui,"Segoe UI",Tahoma,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#13171b;--surface:#1b2026;--surface-2:#222930;--ink:#ebeef1;--muted:#a3abb4;--line:#313941;
+  --ok:#6cc28f;--hot:#f08a5d;--shadow:0 1px 2px rgba(0,0,0,.3);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#13171b;--surface:#1b2026;--surface-2:#222930;--ink:#ebeef1;--muted:#a3abb4;--line:#313941;--ok:#6cc28f;--hot:#f08a5d;--shadow:0 1px 2px rgba(0,0,0,.3);color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:16px}
+
+/* header */
+header.top{background:var(--brand);color:#fff}
+.bar{display:flex;align-items:center;gap:12px;padding-block:12px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+.mark{width:38px;height:38px;border-radius:10px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-weight:800;font-size:15px;flex:none;letter-spacing:.5px}
+.logo b{display:block;font-size:15px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.logo small{display:block;font-size:12px;opacity:.75;line-height:1.2}
+.lang{margin-inline-start:auto;background:rgba(255,255,255,.12);border:0;color:#fff;border-radius:999px;padding:6px 14px;font-weight:600;font-size:14px}
+.hero{padding-block:28px 40px}
+.hero h1{font-size:clamp(26px,6vw,42px);line-height:1.25;margin:0 0 10px;font-weight:800}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p{margin:0 0 20px;opacity:.85;max-width:560px}
+.cta-row{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:12px 20px;font-weight:700;text-decoration:none;font-size:16px;min-height:48px}
+.btn-accent{background:var(--accent);color:var(--accent-ink)}
+.btn-ghost{background:rgba(255,255,255,.12);color:#fff}
+.btn-dark{background:var(--brand);color:#fff}
+:root[data-theme="dark"] .btn-dark{background:var(--accent);color:var(--accent-ink)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn-dark{background:var(--accent);color:var(--accent-ink)}}
+.btn-line{background:transparent;border:1.5px solid var(--line);color:var(--ink)}
+.btn-wa{background:#1fa855;color:#fff}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn svg{width:20px;height:20px;flex:none}
+.trust{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-size:14px;opacity:.85}
+.trust span{display:flex;align-items:center;gap:6px}
+.trust svg{width:18px;height:18px;color:var(--accent)}
+
+/* sections */
+section{padding-block:36px}
+h2{font-size:clamp(22px,4.5vw,28px);margin:0 0 6px;font-weight:800;line-height:1.3}
+.sub{color:var(--muted);margin:0 0 22px}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;box-shadow:var(--shadow);position:relative;scroll-margin-top:20px;transition:box-shadow .3s,border-color .3s}
+.card.flash{border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 35%,transparent)}
+.card.featured{border-color:var(--accent)}
+.badge{position:absolute;top:-11px;inset-inline-start:16px;background:var(--hot);color:#fff;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px}
+.ic{width:46px;height:46px;border-radius:12px;background:var(--surface-2);display:grid;place-items:center;color:var(--accent);margin-bottom:12px}
+.ic svg{width:26px;height:26px}
+.card h3{margin:0 0 4px;font-size:19px;line-height:1.35}
+.price{font-size:26px;font-weight:800;margin:2px 0 2px}
+.price small{font-size:14px;font-weight:600;color:var(--muted)}
+.meta{font-size:13px;color:var(--muted);margin-bottom:12px}
+.card ul{list-style:none;padding:0;margin:0 0 18px;font-size:14px;flex:1}
+.card li{display:flex;gap:8px;padding-block:3px}
+.card li svg{width:16px;height:16px;flex:none;margin-top:4px;color:var(--ok)}
+.card p.d{font-size:14px;color:var(--muted);margin:0 0 14px;flex:1}
+.calc{display:flex;align-items:center;gap:8px;background:var(--surface-2);border-radius:12px;padding:8px 10px;margin-bottom:12px}
+.calc label{font-size:13px;color:var(--muted);white-space:nowrap}
+.calc input{width:100%;min-width:0;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:6px 10px;font-size:16px;text-align:center}
+.calc .tot{font-weight:800;white-space:nowrap}
+.minnote{font-size:12px;color:var(--muted);margin:-6px 0 12px}
+
+/* steps */
+.steps{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));counter-reset:s}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+.step b{display:flex;align-items:center;gap:10px;font-size:16px;margin-bottom:4px}
+.step b::before{counter-increment:s;content:counter(s);width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-size:14px;flex:none}
+.step p{margin:0;font-size:14px;color:var(--muted)}
+
+/* faq */
+details{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:10px}
+summary{font-weight:700;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:10px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:20px;line-height:1;color:var(--accent)}
+details[open] summary::after{content:"–"}
+details p{margin:8px 0 0;color:var(--muted);font-size:15px}
+
+.custom{background:var(--brand);color:#fff;border-radius:20px;padding:24px;display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.custom h3{margin:0 0 4px;font-size:20px}
+.custom p{margin:0;opacity:.8;font-size:15px}
+footer{padding-block:28px 40px;color:var(--muted);font-size:14px;text-align:center}
+footer a{color:var(--muted)}
+
+/* checkout */
+.overlay{position:fixed;inset:0;background:rgba(10,14,18,.55);display:flex;align-items:flex-end;justify-content:center;z-index:50;padding:0}
+.overlay[hidden]{display:none}
+.sheet{background:var(--surface);width:100%;max-width:520px;max-height:92vh;overflow-y:auto;border-radius:22px 22px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px));animation:up .22s ease-out}
+@media (min-width:640px){.overlay{align-items:center;padding:20px}.sheet{border-radius:22px}}
+@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+.sheet-h{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px}
+.sheet-h h3{margin:0;font-size:20px;line-height:1.3}
+.sheet-h small{color:var(--muted);font-size:13px}
+.x{margin-inline-start:auto;background:var(--surface-2);border:0;width:36px;height:36px;border-radius:50%;font-size:20px;line-height:1;flex:none}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.field input,.field textarea{width:100%;border:1px solid var(--line);background:var(--surface-2);border-radius:10px;padding:10px 12px;font-size:16px}
+.field textarea{min-height:70px;resize:vertical}
+.sum{background:var(--surface-2);border-radius:12px;padding:12px 14px;margin:6px 0 16px;font-size:15px}
+.sum div{display:flex;justify-content:space-between;gap:10px}
+.sum .t{font-weight:800;font-size:19px;border-top:1px dashed var(--line);margin-top:6px;padding-top:6px}
+.paylabel{font-weight:700;margin:0 0 8px;font-size:15px}
+.pay{display:grid;gap:10px}
+.manual{border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14px}
+.manual .row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-block:4px}
+.manual code{font-family:inherit;font-weight:700;direction:ltr;unicode-bidi:embed}
+.copy{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:4px 10px;font-size:13px}
+.note{font-size:13px;color:var(--muted);margin:10px 0 0}
+.err{color:var(--hot);font-size:13px;margin-top:4px}
+.oid{font-size:12px;color:var(--muted);direction:ltr;unicode-bidi:embed}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="bar">
+      <a class="logo" href="#">
+        <span class="mark">BA</span>
+        <span><b data-t="brand"></b><small data-t="brandSub"></small></span>
+      </a>
+      <button class="lang" id="langBtn" type="button">English</button>
+    </div>
+    <div class="hero">
+      <h1 data-t="heroH" data-html></h1>
+      <p data-t="heroP"></p>
+      <div class="cta-row">
+        <a class="btn btn-accent" href="#packages" data-t="heroCta"></a>
+        <a class="btn btn-ghost" href="#meter" data-t="heroCta2"></a>
+      </div>
+      <div class="trust">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l7 3v6c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg><i data-t="t1" style="font-style:normal"></i></span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><i data-t="t2" style="font-style:normal"></i></span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12a8 8 0 0114-5.3M20 12a8 8 0 01-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg><i data-t="t3" style="font-style:normal"></i></span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="packages">
+    <h2 data-t="pkH"></h2>
+    <p class="sub" data-t="pkP"></p>
+    <div class="grid" id="pkGrid"></div>
+  </section>
+
+  <section id="meter">
+    <h2 data-t="mH"></h2>
+    <p class="sub" data-t="mP"></p>
+    <div class="grid" id="mGrid"></div>
+  </section>
+
+  <section id="how">
+    <h2 data-t="hH"></h2>
+    <p class="sub" data-t="hP"></p>
+    <div class="steps">
+      <div class="step"><b data-t="s1"></b><p data-t="s1p"></p></div>
+      <div class="step"><b data-t="s2"></b><p data-t="s2p"></p></div>
+      <div class="step"><b data-t="s3"></b><p data-t="s3p"></p></div>
+      <div class="step"><b data-t="s4"></b><p data-t="s4p"></p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="custom">
+      <div><h3 data-t="cH"></h3><p data-t="cP"></p></div>
+      <a class="btn btn-wa" id="customWa" target="_blank" rel="noopener"></a>
+    </div>
+  </section>
+
+  <section id="faq">
+    <h2 data-t="fH"></h2>
+    <div id="faqList" style="margin-top:16px"></div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div data-t="brand" style="font-weight:700;color:var(--ink)"></div>
+  <div id="footLinks"></div>
+  <div>© <span id="yr"></span></div>
+</footer>
+
+<!-- checkout sheet -->
+<div class="overlay" id="ov" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="coTitle">
+    <div class="sheet-h">
+      <div><h3 id="coTitle"></h3><small id="coSub"></small></div>
+      <button class="x" id="coClose" type="button" aria-label="Close">×</button>
+    </div>
+    <form id="coForm" novalidate>
+      <div class="field" id="areaField"><label for="fArea" data-t="fArea"></label><input id="fArea" type="number" inputmode="decimal" min="1" step="1"></div>
+      <div class="field"><label for="fName" data-t="fName"></label><input id="fName" autocomplete="name" required></div>
+      <div class="field"><label for="fPhone" data-t="fPhone"></label><input id="fPhone" type="tel" inputmode="tel" autocomplete="tel" required dir="ltr"></div>
+      <div class="field"><label for="fNotes" data-t="fNotes"></label><textarea id="fNotes"></textarea></div>
+      <div class="err" id="coErr" hidden></div>
+      <div class="sum" id="coSum"></div>
+      <p class="paylabel" data-t="payH"></p>
+      <div class="pay" id="payBox"></div>
+      <p class="note" id="payNote" data-t="payNote"></p>
+      <p class="oid" id="coOid"></p>
+    </form>
+  </div>
+</div>
+
+<script>
+const T = {
+  en: {
+    brand: "Bilal Abu Zaina Design House", brandSub: "Interior Design Studio",
+    heroH: "Your design, <em>ordered in 2 minutes</em>",
+    heroP: "Saw a design you liked in my videos? Pick your service, pay online, send your plan — and get your design delivered.",
+    heroCta: "Browse designs", heroCta2: "Price per meter",
+    t1: "Secure payment", t2: "Fast delivery", t3: "Revisions included",
+    pkH: "Design packages", pkP: "Fixed price — order straight away.",
+    mH: "Price per square meter", mP: "Enter your area and see your total instantly.",
+    hH: "How it works", hP: "No waiting for replies — order it yourself.",
+    s1: "Choose your design", s1p: "Pick a package, or enter your area for per-meter services.",
+    s2: "Pay online", s2p: "Pay by card, InstaPay or wallet in a few taps.",
+    s3: "Send your details", s3p: "Send your plan, photos and measurements on WhatsApp with your order number.",
+    s4: "Receive your design", s4p: "Your design arrives within the stated delivery time — revisions included.",
+    cH: "Need something different?", cP: "Full villa, shop, or a custom request — message me directly.",
+    customBtn: "Chat on WhatsApp",
+    fH: "Questions",
+    faq: [
+      ["What do I need to send?", "A plan or a photo of the space with measurements (a hand sketch is fine), plus any reference pictures you like."],
+      ["When does the delivery time start?", "From the moment I receive your payment and all your details."],
+      ["Can I request changes?", "Yes, every package includes a round of revisions. Extra revisions can be added."],
+      ["Do you supply or execute the work?", "These packages are for design only. You get files you can take to any carpenter or contractor."],
+      ["Is there a minimum area?", "Per-meter services have a minimum area shown on each service."]
+    ],
+    order: "Order now", days: "Delivery: {n} working days", perM: "/ m²",
+    area: "Area (m²)", total: "Total", minA: "Minimum {n} m²",
+    fromVideo: "From my latest video 🔥",
+    fArea: "Area (m²)", fName: "Your name", fPhone: "Phone / WhatsApp", fNotes: "Notes (optional)",
+    errReq: "Please enter your name and phone number.", errArea: "Please enter the area (minimum {n} m²).",
+    service: "Service", sumArea: "Area", payH: "Choose how to pay",
+    payCard: "Pay by card", payWa: "Order on WhatsApp",
+    instapay: "InstaPay", vcash: "Vodafone Cash", copy: "Copy", copied: "Copied ✓",
+    paidBtn: "I've paid — send my details",
+    payNote: "After paying, send the payment screenshot with your plan and measurements on WhatsApp. Your order number is included automatically.",
+    orderNo: "Order no.",
+    waOrder: "Hello, I'd like to order: {svc}", waPaid: "I've paid", waMethod: "Payment method",
+    waCustom: "Hello, I'd like to ask about a custom design."
+  },
+  ar: {
+    brand: "بلال أبو زينة ديزاين هاوس", brandSub: "استوديو تصميم داخلي",
+    heroH: "اطلب تصميمك <em>في دقيقتين</em>",
+    heroP: "عجبك تصميم في الفيديوهات؟ اختار الخدمة، ادفع أونلاين، وابعت المخطط — والتصميم يوصلك.",
+    heroCta: "شوف التصاميم", heroCta2: "السعر بالمتر",
+    t1: "دفع آمن", t2: "تسليم سريع", t3: "تعديلات مشمولة",
+    pkH: "باقات التصميم", pkP: "سعر ثابت — اطلب على طول.",
+    mH: "السعر بالمتر المربع", mP: "اكتب المساحة وشوف الإجمالي فورًا.",
+    hH: "إزاي تطلب", hP: "من غير ما تستنى رد — اطلب بنفسك.",
+    s1: "اختار التصميم", s1p: "اختار باقة، أو اكتب المساحة للخدمات بالمتر.",
+    s2: "ادفع أونلاين", s2p: "ادفع بالكارت أو إنستاباي أو المحفظة في ثواني.",
+    s3: "ابعت التفاصيل", s3p: "ابعت المخطط والصور والمقاسات على واتساب برقم الطلب.",
+    s4: "استلم تصميمك", s4p: "التصميم يوصلك في مدة التسليم المحددة — والتعديلات مشمولة.",
+    cH: "محتاج حاجة مختلفة؟", cP: "فيلا كاملة، محل، أو طلب خاص — كلمني مباشرة.",
+    customBtn: "كلمني واتساب",
+    fH: "أسئلة شائعة",
+    faq: [
+      ["محتاج أبعت إيه؟", "مخطط أو صورة للمكان بالمقاسات (رسم بإيدك ينفع)، وأي صور مرجعية عاجباك."],
+      ["مدة التسليم بتبدأ امتى؟", "من وقت ما يوصلني الدفع وكل التفاصيل."],
+      ["أقدر أطلب تعديلات؟", "أيوه، كل باقة فيها تعديل مرة. وممكن تضيف تعديلات زيادة."],
+      ["هل بتنفذوا الشغل؟", "الباقات دي تصميم فقط. هتستلم ملفات تقدر تديها لأي نجار أو مقاول."],
+      ["فيه حد أدنى للمساحة؟", "الخدمات بالمتر ليها حد أدنى مكتوب على كل خدمة."]
+    ],
+    order: "اطلب الآن", days: "التسليم: {n} أيام عمل", perM: "/ م²",
+    area: "المساحة (م²)", total: "الإجمالي", minA: "الحد الأدنى {n} م²",
+    fromVideo: "من آخر فيديو 🔥",
+    fArea: "المساحة (م²)", fName: "الاسم", fPhone: "رقم الموبايل / واتساب", fNotes: "ملاحظات (اختياري)",
+    errReq: "من فضلك اكتب الاسم ورقم الموبايل.", errArea: "من فضلك اكتب المساحة (الحد الأدنى {n} م²).",
+    service: "الخدمة", sumArea: "المساحة", payH: "اختار طريقة الدفع",
+    payCard: "ادفع بالكارت", payWa: "اطلب على واتساب",
+    instapay: "إنستاباي", vcash: "فودافون كاش", copy: "نسخ", copied: "تم النسخ ✓",
+    paidBtn: "دفعت — ابعت التفاصيل",
+    payNote: "بعد الدفع ابعت صورة التحويل مع المخطط والمقاسات على واتساب. رقم الطلب بيتبعت تلقائيًا.",
+    orderNo: "رقم الطلب",
+    waOrder: "أهلاً، عايز أطلب: {svc}", waPaid: "تم الدفع", waMethod: "طريقة الدفع",
+    waCustom: "أهلاً، عايز أسأل عن تصميم خاص."
+  }
+};
+
+const ICONS = {
+  kitchen:'<rect x="3" y="10" width="18" height="10" rx="1"/><path d="M3 14h18M9 10v10M15 10v10M6 4h4v3H6zM14 4h4v3h-4z"/>',
+  bath:'<path d="M3 12h18v3a5 5 0 01-5 5H8a5 5 0 01-5-5v-3zM6 12V6a2 2 0 014 0M7 20l-1 2M17 20l1 2"/>',
+  tv:'<rect x="5" y="4" width="14" height="9" rx="1"/><path d="M2 16h20v4H2zM8 18h2M14 18h2"/>',
+  wardrobe:'<rect x="4" y="3" width="16" height="18" rx="1"/><path d="M12 3v18M10 11v2M14 11v2"/>',
+  plan:'<path d="M3 3h18v18H3zM3 11h8V3M11 15v6M15 11h6"/>',
+  cube:'<path d="M12 2l9 5v10l-9 5-9-5V7l9-5z"/><path d="M3 7l9 5 9-5M12 12v10"/>',
+  ruler:'<path d="M3 17L17 3l4 4L7 21z"/><path d="M7 13l2 2M10 10l2 2M13 7l2 2"/>'
+};
+const svg = (p, sw=1.8) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const CHECK = svg('<path d="M5 12l5 5L20 7"/>', 2.5);
+const WA = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.8 11.9 11.9 0 004.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.4-.2z"/></svg>';
+
+let lang = (() => { try { const s = localStorage.getItem('bazLang'); if (s) return s; } catch(e){}
+  return new URLSearchParams(location.search).get('lang') === 'en' ? 'en' : 'ar'; })();
+const t = (k, vars={}) => String(T[lang][k] ?? k).replace(/\{(\w+)\}/g, (_, v) => vars[v]);
+const L = o => o[lang] ?? o.en;
+const money = n => Math.round(n).toLocaleString(lang === 'ar' ? 'ar-EG' : 'en-US') + ' ' + L(CONFIG.currency);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const waLink = text => `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`;
+const areas = {};
+
+function sortedPackages(){
+  const p = CONFIG.packages.slice();
+  const i = p.findIndex(x => x.id === CONFIG.featured);
+  if (i > 0) p.unshift(p.splice(i,1)[0]);
+  return p;
+}
+
+function render(){
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  document.getElementById('langBtn').textContent = lang === 'ar' ? 'English' : 'العربية';
+  document.querySelectorAll('[data-t]').forEach(el => {
+    if (el.hasAttribute('data-html')) el.innerHTML = t(el.dataset.t); else el.textContent = t(el.dataset.t);
+  });
+  document.title = t('brand');
+
+  document.getElementById('pkGrid').innerHTML = sortedPackages().map(p => `
+    <article class="card${p.id===CONFIG.featured?' featured':''}" id="${p.id}">
+      ${p.id===CONFIG.featured?`<span class="badge">${t('fromVideo')}</span>`:''}
+      <div class="ic">${svg(ICONS[p.icon])}</div>
+      <h3>${esc(L(p.name))}</h3>
+      <div class="price">${money(p.price)}</div>
+      <div class="meta">${t('days',{n:p.days})}</div>
+      <ul>${L(p.items).map(i=>`<li>${CHECK}<span>${esc(i)}</span></li>`).join('')}</ul>
+      <button class="btn btn-dark" type="button" data-order="${p.id}">${t('order')}</button>
+    </article>`).join('');
+
+  document.getElementById('mGrid').innerHTML = CONFIG.perMeter.map(m => {
+    const a = areas[m.id] ?? m.min;
+    return `
+    <article class="card${m.id===CONFIG.featured?' featured':''}" id="${m.id}">
+      ${m.id===CONFIG.featured?`<span class="badge">${t('fromVideo')}</span>`:''}
+      <div class="ic">${svg(ICONS[m.icon])}</div>
+      <h3>${esc(L(m.name))}</h3>
+      <div class="price">${money(m.rate)} <small>${t('perM')}</small></div>
+      <div class="meta">${t('days',{n:m.days})}</div>
+      <p class="d">${esc(L(m.desc))}</p>
+      <div class="calc">
+        <label for="a-${m.id}">${t('area')}</label>
+        <input id="a-${m.id}" type="number" inputmode="decimal" min="${m.min}" value="${a}" data-area="${m.id}">
+        <span class="tot" id="tot-${m.id}">${money(Math.max(a,m.min)*m.rate)}</span>
+      </div>
+      <p class="minnote">${t('minA',{n:m.min})}</p>
+      <button class="btn btn-dark" type="button" data-order="${m.id}">${t('order')}</button>
+    </article>`; }).join('');
+
+  document.getElementById('faqList').innerHTML = T[lang].faq.map(([q,a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('');
+  const cw = document.getElementById('customWa');
+  cw.href = waLink(t('waCustom')); cw.innerHTML = WA + esc(t('customBtn'));
+  document.getElementById('footLinks').innerHTML = CONFIG.instagram
+    ? `<a href="https://instagram.com/${encodeURIComponent(CONFIG.instagram)}" target="_blank" rel="noopener">@${esc(CONFIG.instagram)}</a>` : '';
+  document.getElementById('yr').textContent = new Date().getFullYear();
+}
+
+/* ---------- checkout ---------- */
+let cur = null, oid = '';
+const $ = id => document.getElementById(id);
+const findSvc = id => CONFIG.packages.find(p=>p.id===id) ? {...CONFIG.packages.find(p=>p.id===id), kind:'pkg'}
+  : CONFIG.perMeter.find(p=>p.id===id) ? {...CONFIG.perMeter.find(p=>p.id===id), kind:'m2'} : null;
+
+function amount(){
+  if (!cur) return 0;
+  if (cur.kind === 'pkg') return cur.price;
+  const a = parseFloat($('fArea').value);
+  return (isFinite(a) ? Math.max(a, cur.min) : cur.min) * cur.rate;
+}
+function openCheckout(id){
+  cur = findSvc(id); if (!cur) return;
+  oid = 'BAZ-' + Date.now().toString(36).slice(-5).toUpperCase();
+  $('coTitle').textContent = L(cur.name);
+  $('coSub').textContent = t('days',{n:cur.days});
+  $('areaField').hidden = cur.kind !== 'm2';
+  if (cur.kind === 'm2') $('fArea').value = areas[cur.id] ?? cur.min;
+  $('coErr').hidden = true;
+  $('coOid').textContent = `${t('orderNo')}: ${oid}`;
+  updateSum(); renderPay();
+  $('ov').hidden = false; document.body.style.overflow = 'hidden';
+  setTimeout(() => (cur.kind==='m2' ? $('fArea') : $('fName')).focus(), 50);
+}
+function closeCheckout(){ $('ov').hidden = true; document.body.style.overflow = ''; }
+function updateSum(){
+  let h = `<div><span>${t('service')}</span><span>${esc(L(cur.name))}</span></div>`;
+  if (cur.kind === 'm2') {
+    const a = parseFloat($('fArea').value);
+    h += `<div><span>${t('sumArea')}</span><span>${isFinite(a)?Math.max(a,cur.min):cur.min} m² × ${money(cur.rate)}</span></div>`;
+  }
+  h += `<div class="t"><span>${t('total')}</span><span>${money(amount())}</span></div>`;
+  $('coSum').innerHTML = h;
+}
+function renderPay(){
+  const box = $('payBox'); let h = '';
+  if (cur.payLink) h += `<button type="button" class="btn btn-accent" data-pay="card">${svg('<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',2)}${t('payCard')}</button>`;
+  const manual = [];
+  if (CONFIG.instapay) manual.push(['instapay', CONFIG.instapay]);
+  if (CONFIG.vodafoneCash) manual.push(['vcash', CONFIG.vodafoneCash]);
+  if (manual.length) {
+    h += `<div class="manual">${manual.map(([k,v]) => `<div class="row"><span>${t(k)}: <code>${esc(v)}</code></span><button type="button" class="copy" data-copy="${esc(v)}">${t('copy')}</button></div>`).join('')}
+      <button type="button" class="btn btn-wa" style="width:100%;margin-top:8px" data-pay="manual">${WA}${t('paidBtn')}</button></div>`;
+  }
+  if (!h) h = `<button type="button" class="btn btn-wa" data-pay="wa">${WA}${t('payWa')}</button>`;
+  box.innerHTML = h;
+  $('payNote').hidden = !(cur.payLink || manual.length);
+}
+function validate(){
+  const err = $('coErr');
+  if (cur.kind === 'm2') {
+    const a = parseFloat($('fArea').value);
+    if (!isFinite(a) || a < cur.min) { err.textContent = t('errArea',{n:cur.min}); err.hidden = false; $('fArea').focus(); return false; }
+  }
+  if (!$('fName').value.trim() || $('fPhone').value.replace(/\D/g,'').length < 8) {
+    err.textContent = t('errReq'); err.hidden = false; (!$('fName').value.trim() ? $('fName') : $('fPhone')).focus(); return false;
+  }
+  err.hidden = true; return true;
+}
+function orderText(method){
+  const lines = [t('waOrder',{svc:L(cur.name)}), `${t('orderNo')}: ${oid}`];
+  if (cur.kind === 'm2') lines.push(`${t('sumArea')}: ${Math.max(parseFloat($('fArea').value), cur.min)} m²`);
+  lines.push(`${t('total')}: ${money(amount())}`, `${t('fName')}: ${$('fName').value.trim()}`, `${t('fPhone')}: ${$('fPhone').value.trim()}`);
+  if ($('fNotes').value.trim()) lines.push(`${t('fNotes')}: ${$('fNotes').value.trim()}`);
+  if (method) lines.push(`${t('waMethod')}: ${method}`);
+  return lines.join('\n');
+}
+
+document.addEventListener('click', e => {
+  const o = e.target.closest('[data-order]'); if (o) return openCheckout(o.dataset.order);
+  const c = e.target.closest('[data-copy]');
+  if (c) { navigator.clipboard?.writeText(c.dataset.copy).then(() => { c.textContent = t('copied'); setTimeout(()=>c.textContent=t('copy'),1500); }).catch(()=>{}); return; }
+  const p = e.target.closest('[data-pay]');
+  if (p) {
+    if (!validate()) return;
+    const k = p.dataset.pay;
+    if (k === 'card') {
+      // Card link opens in a new tab; WhatsApp message prepared so they can send details after paying.
+      window.open(cur.payLink, '_blank', 'noopener');
+      const wa = $('payBox').querySelector('[data-pay="after"]');
+      if (!wa) p.insertAdjacentHTML('afterend', `<button type="button" class="btn btn-wa" data-pay="after">${WA}${t('paidBtn')}</button>`);
+      return;
+    }
+    const method = k === 'after' ? t('payCard') + ' — ' + t('waPaid') : k === 'manual' ? [CONFIG.instapay&&t('instapay'), CONFIG.vodafoneCash&&t('vcash')].filter(Boolean).join(' / ') + ' — ' + t('waPaid') : '';
+    window.open(waLink(orderText(method)), '_blank', 'noopener');
+    return;
+  }
+  if (e.target === $('ov') || e.target.closest('#coClose')) closeCheckout();
+});
+document.addEventListener('input', e => {
+  const id = e.target.dataset?.area;
+  if (id) { const m = CONFIG.perMeter.find(x=>x.id===id); const a = parseFloat(e.target.value); areas[id] = e.target.value;
+    $('tot-'+id).textContent = money((isFinite(a)?Math.max(a,m.min):m.min)*m.rate); }
+  if (e.target.id === 'fArea' && cur) { areas[cur.id] = e.target.value; updateSum(); }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('ov').hidden) closeCheckout(); });
+$('coForm').addEventListener('submit', e => e.preventDefault());
+$('langBtn').addEventListener('click', () => {
+  lang = lang === 'ar' ? 'en' : 'ar';
+  try { localStorage.setItem('bazLang', lang); } catch(e){}
+  render(); if (!$('ov').hidden && cur) { $('coTitle').textContent = L(cur.name); $('coSub').textContent = t('days',{n:cur.days}); updateSum(); renderPay(); $('coOid').textContent = `${t('orderNo')}: ${oid}`; }
+});
+
+/* Deep link: .../design/#kitchen highlights that card. ?order=kitchen opens checkout directly. */
+function handleHash(){
+  const q = new URLSearchParams(location.search).get('order');
+  const id = (q || location.hash.slice(1)).toLowerCase();
+  const el = id && document.getElementById(id);
+  if (!el || !el.classList.contains('card')) return;
+  el.scrollIntoView({block:'center'});
+  el.classList.add('flash'); setTimeout(()=>el.classList.remove('flash'), 2200);
+  if (q) openCheckout(id);
+}
+render();
+window.addEventListener('hashchange', handleHash);
+handleHash();
+</script>
+</body>
+</html>
