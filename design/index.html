@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Bilal Abu Zaina Design House</title>
+<title>Belal Abouzeina Design House</title>
 <meta name="description" content="Interior design and execution — kitchens, dressing rooms, bathrooms, finishing works. Order your design online; free when we build it.">
-<meta property="og:title" content="Bilal Abu Zaina Design House">
+<meta property="og:title" content="Belal Abouzeina Design House">
 <meta property="og:description" content="Designs, ordered like products. Choose, pay, send your plan.">
 <meta name="theme-color" content="#efeae1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -137,8 +137,9 @@ html[lang="en"] .mono,html[lang="en"] .cap{text-transform:uppercase;letter-spaci
 .name{font-family:var(--disp);font-weight:800;line-height:.92;margin:0;font-size:clamp(44px,13vw,124px)}
 html[lang="en"] .name{font-stretch:125%;text-transform:uppercase;letter-spacing:-.02em;font-size:clamp(40px,11.5vw,112px)}
 html[lang="ar"] .name{font-weight:700;line-height:1.15}
-.name .l2{display:block;font-size:.38em;font-weight:500;margin-top:.35em;line-height:1.1}
-html[lang="en"] .name .l2{font-stretch:100%;letter-spacing:.14em;font-weight:600}
+.name{margin:0}
+.logo{display:block;width:100%;max-width:640px;aspect-ratio:961/388;background:currentColor;-webkit-mask:url(assets/logo.svg) no-repeat center/contain;mask:url(assets/logo.svg) no-repeat center/contain}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .lede{font-size:clamp(18px,4.6vw,22px);line-height:1.45;margin:18px 0 22px;max-width:30ch}
 .btn{display:inline-flex;align-items:center;gap:12px;min-height:50px;padding:0 20px;background:var(--ink);color:var(--on-ink);font-weight:700;text-decoration:none;font-size:16px;border:1.5px solid var(--ink);transition:background .15s,color .15s}
 .btn:hover{background:transparent;color:var(--ink)}
@@ -326,7 +327,7 @@ html[lang="en"] .credit{text-transform:uppercase;letter-spacing:.06em}
 
   <header class="hero">
     <div>
-      <h1 class="name"><span data-t="name1"></span><span class="l2" data-t="name2"></span></h1>
+      <h1 class="name"><span class="logo" aria-hidden="true"></span><span class="sr">Belal Abouzeina Design House — بلال أبوزينة ديزاين هاوس</span></h1>
       <p class="lede" data-t="lede"></p>
       <a class="btn" href="#s1"><span data-t="cta"></span><span class="arr">↓</span></a>
     </div>
@@ -469,8 +470,8 @@ html[lang="en"] .credit{text-transform:uppercase;letter-spacing:.06em}
 <script>
 const T = {
   en: {
-    strip: "Bilal Abu Zaina — Design House",
-    name1: "Bilal Abu Zaina", name2: "Design House",
+    strip: "Belal Abouzeina — Design House",
+    name1: "Belal Abouzeina", name2: "Design House",
     lede: "Design and execution. Order your design online in two minutes — and if we build your kitchen or dressing room, the design is free.",
     hEx: "Execution", pEx: "We build it too. Priced after a site visit.", visit: "Priced after site visit", reqVisit: "Request a site visit",
     credit: "Design free if we build it", fLoc: "Location (city / area)", fRef: "Design order no. (if you have one)", areaOpt: "Approx. area (m², optional)",
@@ -509,8 +510,8 @@ const T = {
     latest: "From the latest video"
   },
   ar: {
-    strip: "بلال أبو زينة — ديزاين هاوس",
-    name1: "بلال أبو زينة", name2: "ديزاين هاوس",
+    strip: "بلال أبوزينة — ديزاين هاوس",
+    name1: "بلال أبوزينة", name2: "ديزاين هاوس",
     lede: "تصميم وتنفيذ. اطلب تصميمك أونلاين في دقيقتين — ولو نفّذنا مطبخك أو غرفة الملابس، التصميم ببلاش.",
     hEx: "التنفيذ", pEx: "وبننفّذ كمان. السعر بعد المعاينة.", visit: "السعر بعد المعاينة", reqVisit: "اطلب معاينة",
     credit: "التصميم ببلاش لو نفّذنا", fLoc: "المكان (المدينة / المنطقة)", fRef: "رقم طلب التصميم (لو عندك)", areaOpt: "المساحة تقريباً (م²، اختياري)",
@@ -584,7 +585,7 @@ function render(){
   const h = document.documentElement; h.lang = lang; h.dir = lang === 'ar' ? 'rtl' : 'ltr';
   document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang));
   document.querySelectorAll('[data-t]').forEach(el => el.textContent = t(el.dataset.t));
-  document.title = lang === 'ar' ? 'بلال أبو زينة ديزاين هاوس' : 'Bilal Abu Zaina Design House';
+  document.title = lang === 'ar' ? 'بلال أبوزينة ديزاين هاوس' : 'Belal Abouzeina Design House';
 
   $('pkList').innerHTML = pkgs().map(p => `
     <div class="row" id="${p.id}">${stamp(p.id)}
@@ -614,7 +615,7 @@ function render(){
   $('customWa').href = waLink(t('waCustom')); $('customWa').innerHTML = WA + `<span>${t('wa')}</span>`;
   const phone = '+' + CONFIG.whatsapp;
   $('tblock').innerHTML = `
-    <div class="wide"><span class="k">${t('tStudio')}</span><span class="v big">${esc(t('name1'))}</span><span class="mono muted" style="display:block">${esc(t('name2'))}</span></div>
+    <div class="wide"><span class="k">${t('tStudio')}</span><span class="logo" style="max-width:220px;margin-top:6px" role="img" aria-label="${esc(t('name1'))} ${esc(t('name2'))}"></span></div>
     <div><span class="k">${t('tContact')}</span><a class="v" href="https://wa.me/${CONFIG.whatsapp}" target="_blank" rel="noopener" dir="ltr">${phone}</a>${CONFIG.instagram ? `<br><a class="v" href="https://instagram.com/${encodeURIComponent(CONFIG.instagram)}" target="_blank" rel="noopener" dir="ltr">@${esc(CONFIG.instagram)}</a>` : ''}</div>
     <div><span class="k">${t('tSheet')}</span><span class="v mono">01 / 01</span></div>
     <div><span class="k">${t('tDate')}</span><span class="v mono">${new Date().getFullYear()}</span></div>`;
