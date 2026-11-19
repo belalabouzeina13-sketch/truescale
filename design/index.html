@@ -179,7 +179,27 @@ html[dir="rtl"] .arr.flip{display:inline-block;transform:scaleX(-1)}
 .plan-cap{display:flex;justify-content:space-between;border-top:1px solid var(--hair);padding-top:6px;margin-top:4px}
 
 /* section heads */
-section{padding-block:36px 8px}
+section{padding-block:36px 8px;scroll-margin-top:52px}
+.nav{position:sticky;top:0;z-index:20;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;background:var(--paper);border-bottom:1.5px solid var(--rule);margin-inline:-16px;padding:8px 16px}
+.nav::-webkit-scrollbar{display:none}
+@media (min-width:760px){.nav{margin-inline:0;padding-inline:0}}
+.nav a{flex:none;text-decoration:none;font-family:var(--mono);font-size:12px;font-weight:600;padding:6px 10px;border:1.5px solid transparent;white-space:nowrap;color:var(--ink-2)}
+html[lang="en"] .nav a{text-transform:uppercase;letter-spacing:.06em}
+.nav a .n{color:var(--red);margin-inline-end:6px}
+.nav a:hover{color:var(--ink);border-color:var(--hair)}
+.nav a.on{color:var(--on-ink);background:var(--ink);border-color:var(--ink)}
+.nav a.on .n{color:inherit}
+.paths{border-top:1.5px solid var(--rule);max-width:520px}
+.paths a{display:grid;grid-template-columns:28px 1fr auto;gap:2px 12px;align-items:center;text-decoration:none;padding:14px 4px;border-bottom:1px solid var(--hair);transition:background .15s}
+.paths a:hover{background:var(--ink);color:var(--on-ink)}
+.paths a:hover .muted,.paths a:hover .red{color:inherit}
+.paths .k{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--red);grid-row:1 / 3}
+.paths b{font-size:18px;line-height:1.25}
+.paths .mono{grid-column:2}
+.paths .arr{grid-row:1 / 3;grid-column:3;font-family:var(--mono);font-size:18px}
+.fab{position:fixed;inset-inline-end:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;width:54px;height:54px;display:grid;place-items:center;background:#167d43;color:#fff;border:1.5px solid var(--paper);box-shadow:0 0 0 1.5px #167d43}
+.fab svg{width:26px;height:26px}
+body.lock .fab{display:none}
 .shead{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:baseline;margin-bottom:18px}
 .shead .no{font-family:var(--mono);font-size:13px;color:var(--red);font-weight:600}
 .shead h2{margin:0;font-family:var(--disp);font-weight:800;font-size:clamp(26px,6vw,40px);line-height:1.1}
@@ -190,7 +210,7 @@ html[lang="ar"] .shead h2{font-weight:700}
 /* schedule (fixed packages) */
 .sched{border-top:1.5px solid var(--rule)}
 .sched-hd{display:none}
-.row{position:relative;display:grid;grid-template-columns:52px 1fr auto;gap:2px 12px;padding:18px 0 20px;border-bottom:1px solid var(--hair);scroll-margin-top:24px;transition:background .3s}
+.row{position:relative;display:grid;grid-template-columns:52px 1fr auto;gap:2px 12px;padding:18px 0 20px;border-bottom:1px solid var(--hair);scroll-margin-top:70px;transition:background .3s}
 .row .code{font-family:var(--mono);font-size:12px;font-weight:600;padding-top:7px}
 .row .nm{font-family:var(--disp);font-weight:700;font-size:clamp(24px,6.4vw,34px);line-height:1.15;margin:0}
 html[lang="en"] .row .nm{font-stretch:110%;text-transform:uppercase;letter-spacing:-.01em}
@@ -230,7 +250,7 @@ html[dir="rtl"] .ruler input{direction:ltr}
 .ruler input::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:34px;background:var(--red);clip-path:polygon(0 0,100% 0,100% 70%,50% 100%,0 70%)}
 .ruler input::-moz-range-thumb{width:14px;height:34px;border:0;border-radius:0;background:var(--red);clip-path:polygon(0 0,100% 0,100% 70%,50% 100%,0 70%)}
 .ticks{display:flex;justify-content:space-between;direction:ltr;font-family:var(--mono);font-size:10px;color:var(--ink-2);margin-top:4px}
-.mrow{display:grid;grid-template-columns:52px 1fr auto;gap:2px 12px;padding:16px;border-bottom:1px solid var(--hair);scroll-margin-top:24px;position:relative;transition:background .3s}
+.mrow{display:grid;grid-template-columns:52px 1fr auto;gap:2px 12px;padding:16px;border-bottom:1px solid var(--hair);scroll-margin-top:70px;position:relative;transition:background .3s}
 .mrow:last-child{border-bottom:0}
 .mrow.hit{background:color-mix(in srgb,var(--red) 9%,transparent)}
 .mrow .code{font-family:var(--mono);font-size:12px;font-weight:600;padding-top:4px}
@@ -371,12 +391,13 @@ html[lang="en"] .credit{text-transform:uppercase;letter-spacing:.06em}
       <button type="button" data-lang="ar">ع</button><button type="button" data-lang="en">EN</button>
     </div>
   </div>
+  <nav class="nav" id="nav" aria-label="Sections"></nav>
 
   <header class="hero">
     <div>
       <h1 class="name"><span class="logo" aria-hidden="true"></span><span class="sr">Belal Abouzeina Design House — بلال أبوزينة ديزاين هاوس</span></h1>
       <p class="lede" data-t="lede"></p>
-      <a class="btn" href="#s1"><span data-t="cta"></span><span class="arr">↓</span></a>
+      <div class="paths" id="paths"></div>
     </div>
     <figure style="margin:0">
       <svg class="plan" viewBox="0 0 320 236" role="img" aria-label="Kitchen plan drawing">
@@ -489,6 +510,8 @@ html[lang="en"] .credit{text-transform:uppercase;letter-spacing:.06em}
 
 <div class="lb" id="lb" hidden role="dialog" aria-modal="true"><figure style="margin:0"><img id="lbImg" alt=""><p id="lbCap"></p></figure></div>
 
+<a class="fab" id="fab" target="_blank" rel="noopener" aria-label="WhatsApp"></a>
+
 <!-- work order -->
 <div class="wo" id="wo" hidden>
   <div class="wo-panel" role="dialog" aria-modal="true" aria-labelledby="woTitle">
@@ -533,7 +556,7 @@ const T = {
     credit: "Design free if we build it", fLoc: "Location (city / area)", fRef: "Design order no. (if you have one)", areaOpt: "Approx. area (m², optional)",
     exSend: "Send request on WhatsApp", exCredit: "Ordered the design from us? Its fee is deducted from the execution price.",
     exNote: "We'll contact you to book the site visit and send a quote.", waExec: "Hello, execution request {id}", lLoc: "Location", lRef: "Design order", errLoc: "Enter your location.",
-    cta: "See the schedule", figL: "Fig. 1 — Kitchen, plan view",
+    cta: "See the schedule", navWork: "Work", navDesigns: "Designs", navMeter: "Per m²", navExec: "Execution", navHow: "How it works", navNotes: "Notes", pathDesign: "One room or piece — kitchen, bathroom, TV unit…", pathApt: "A whole apartment or villa — 2D, 3D, technical", pathExec: "Build it — finishing, kitchens, dressing rooms", fromP: "From {p}", figL: "Fig. 1 — Kitchen, plan view",
     h1: "Schedule of designs", p1: "Fixed price. Order directly.",
     colCode: "Code", colItem: "Item", colScope: "Scope", colPrice: "Price",
     h2: "Priced by area", p2: "Set your area on the scale — every price updates.",
@@ -577,7 +600,7 @@ const T = {
     credit: "التصميم ببلاش لو نفّذنا", fLoc: "المكان (المدينة / المنطقة)", fRef: "رقم طلب التصميم (لو عندك)", areaOpt: "المساحة تقريباً (م²، اختياري)",
     exSend: "ابعت الطلب واتساب", exCredit: "طلبت التصميم مننا؟ تمنه بيتخصم من سعر التنفيذ.",
     exNote: "هنتواصل معاك نحدد ميعاد المعاينة ونبعتلك عرض السعر.", waExec: "أهلاً، طلب تنفيذ {id}", lLoc: "المكان", lRef: "طلب التصميم", errLoc: "اكتب مكانك.",
-    cta: "شوف الجدول", figL: "شكل ١ — مطبخ، مسقط أفقي",
+    cta: "شوف الجدول", navWork: "شغلنا", navDesigns: "التصاميم", navMeter: "بالمتر", navExec: "التنفيذ", navHow: "الخطوات", navNotes: "ملاحظات", pathDesign: "أوضة أو قطعة واحدة — مطبخ، حمام، تليفزيون…", pathApt: "شقة أو فيلا كاملة — 2D، 3D، تنفيذي", pathExec: "نفّذها — تشطيبات، مطابخ، غرف ملابس", fromP: "من {p}", figL: "شكل ١ — مطبخ، مسقط أفقي",
     h1: "جدول التصاميم", p1: "سعر ثابت. اطلب على طول.",
     colCode: "الكود", colItem: "البند", colScope: "المحتوى", colPrice: "السعر",
     h2: "بالمساحة", p2: "حرّك المسطرة على مساحتك — كل الأسعار بتتحسب.",
@@ -684,6 +707,13 @@ function render(){
   $('moreWork').hidden = CONFIG.portfolio.length <= 9 || $('work').classList.contains('open');
   $('moreWork').textContent = t('moreWork',{n:CONFIG.portfolio.length});
   document.querySelectorAll('main section:not([hidden]) .shead .no').forEach((el, i) => el.textContent = String(i + 1).padStart(2, '0'));
+  const navItems = [['s4','navWork'],['s1','navDesigns'],['s2','navMeter'],['sx','navExec'],['s3','navHow'],['s5','navNotes']].filter(([id]) => !$(id).hidden);
+  $('nav').innerHTML = navItems.map(([id,k]) => `<a href="#${id}" data-sec="${id}"><span class="n">${$(id).querySelector('.no').textContent}</span>${t(k)}</a>`).join('');
+  const minPkg = Math.min(...CONFIG.packages.filter(p => p.price != null).map(p => p.price)), minRate = Math.min(...CONFIG.perMeter.map(m => m.rate));
+  $('paths').innerHTML = [['#s1','A',t('pathDesign'),t('fromP',{p:money(minPkg)})],['#s2','B',t('pathApt'),t('fromP',{p:money(minRate)}) + ' ' + t('perM',{r:''}).replace(/^\s*/,'')],['#sx','C',t('pathExec'),t('visit')]]
+    .map(([h,k,b,sub]) => `<a href="${h}"><span class="k">${k}</span><b>${esc(b)}</b><span class="arr">↓</span><span class="mono muted">${esc(sub)}</span></a>`).join('');
+  $('fab').href = waLink(t('waCustom')); $('fab').innerHTML = WA;
+  spy();
 
   $('customWa').href = waLink(t('waCustom')); $('customWa').innerHTML = WA + `<span>${t('wa')}</span>`;
   const phone = '+' + CONFIG.whatsapp;
@@ -757,10 +787,10 @@ function openWO(id){
   $('woErr').hidden = true;
   document.querySelector('input[name=meas][value=own]').checked = true; $('plan').value = ''; $('planL').textContent = t('attachPlan');
   fillWO();
-  $('wo').hidden = false; document.body.style.overflow = 'hidden';
+  $('wo').hidden = false; document.body.style.overflow = 'hidden'; document.body.classList.add('lock');
   setTimeout(() => $('fName').focus({preventScroll:true}), 60);
 }
-function closeWO(){ $('wo').hidden = true; document.body.style.overflow = ''; }
+function closeWO(){ $('wo').hidden = true; document.body.style.overflow = ''; document.body.classList.remove('lock'); }
 function valid(){
   const e = $('woErr');
   if (cur.kind === 'm2' && woArea() < cur.min) { e.textContent = t('errArea',{n:cur.min}); e.hidden = false; $('woArea').focus(); return false; }
@@ -844,6 +874,15 @@ function deep(){
   if (!el || !(el.classList.contains('row') || el.classList.contains('mrow'))) return;
   el.scrollIntoView({block:'center'}); el.classList.add('hit'); setTimeout(() => el.classList.remove('hit'), 2400);
   if (q) openWO(id);
+}
+let spyObs;
+function spy(){
+  spyObs?.disconnect();
+  spyObs = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) {
+    document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('on', a.dataset.sec === en.target.id));
+    const on = document.querySelector('.nav a.on'); if (on) on.scrollIntoView({block:'nearest', inline:'nearest'});
+  } }), { rootMargin: '-45% 0px -50% 0px' });
+  document.querySelectorAll('main section[id]:not([hidden])').forEach(s => spyObs.observe(s));
 }
 render();
 window.addEventListener('hashchange', deep);
