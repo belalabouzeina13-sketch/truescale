@@ -48,15 +48,15 @@ const CONFIG = {
 
   // Per-square-meter work. deposit = share paid now (0.5 = 50%); 1 = full payment.
   perMeter: [
-    { id: "2d",   code: "P-2D", rate: 150, min: 50, days: 5,  deposit: 0.5, payLink: "",
+    { id: "2d",   code: "P-2D", rate: 50,  min: 50, days: 5,  deposit: 0.5, payLink: "",
       name: { en: "2D Layout", ar: "توزيع 2D" },
       desc: { en: "Furniture layout for the whole unit.", ar: "توزيع الأثاث للوحدة كاملة." } },
-    { id: "3d",   code: "P-3D", rate: 350, min: 50, days: 10, deposit: 0.5, payLink: "",
+    { id: "3d",   code: "P-3D", rate: 200, min: 50, days: 10, deposit: 0.5, payLink: "",
       name: { en: "3D Interior", ar: "تصميم 3D" },
       desc: { en: "Full 3D design, realistic renders of every room.", ar: "تصميم 3D كامل بصور واقعية لكل الغرف." } },
-    { id: "tech", code: "P-TD", rate: 200, min: 50, days: 7,  deposit: 0.5, payLink: "",
-      name: { en: "Technical Drawings", ar: "رسومات تنفيذية" },
-      desc: { en: "Electrical, plumbing, ceilings, flooring.", ar: "كهرباء، سباكة، أسقف، أرضيات." } }
+    { id: "tech", code: "P-3T", rate: 250, min: 50, days: 14, deposit: 0.5, payLink: "",
+      name: { en: "3D + Technical Drawings", ar: "3D + رسومات تنفيذية" },
+      desc: { en: "Full 3D design plus execution drawings: electrical, plumbing, ceilings, flooring.", ar: "تصميم 3D كامل مع رسومات تنفيذية: كهرباء، سباكة، أسقف، أرضيات." } }
   ],
 
   // Your work. Add image paths/URLs, e.g. { src: "work/kitchen-1.jpg", en: "Kitchen, New Cairo", ar: "مطبخ، التجمع" }
