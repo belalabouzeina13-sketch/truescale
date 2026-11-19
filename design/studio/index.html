@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Studio — Bilal Abu Zaina Design House</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/sheet.css">
+<script src="../assets/contact.js"></script>
+<script src="../assets/vault.js"></script>
+<style>
+main{display:grid;gap:28px;padding-block:24px 60px}
+@media (min-width:960px){main{grid-template-columns:1fr 1fr;align-items:start}}
+.no{font-family:var(--mono);color:var(--red);font-weight:600;font-size:13px;margin-inline-end:10px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.files{margin-top:8px}
+.files .r{font-size:14px}
+.files .r span:first-child{overflow-wrap:anywhere}
+.log{font-family:var(--mono);font-size:12px;white-space:pre-wrap;background:var(--paper-2);padding:10px;margin-top:12px;max-height:180px;overflow:auto}
+.ok{color:#2f7d4f;font-weight:700}
+.links .r{flex-wrap:wrap}
+.links input{flex:1;min-width:0;border:0;border-bottom:1px solid var(--hair);background:transparent;font-family:var(--mono);font-size:12px;padding:4px 0}
+.acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.acts .btn{min-height:42px;padding:0 14px;font-size:14px}
+.order{border-bottom:1px solid var(--hair);padding:12px 0}
+.order .top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.order b{font-size:16px}
+.order .acts{margin-top:8px;gap:14px}
+.order .acts button,.order .acts a{font-size:14px}
+details.help{margin-top:10px;font-size:14px;color:var(--ink-2)}
+details.help summary{cursor:pointer;font-weight:600;color:var(--ink)}
+details.help ol{padding-inline-start:20px;margin:6px 0}
+.chk{display:flex;gap:8px;align-items:center;margin-top:12px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="strip">
+    <a href="../"><span class="monogram">BAZ</span><span class="mono">Studio — deliveries</span></a>
+  </div>
+
+  <main>
+    <div style="display:grid;gap:28px">
+      <!-- settings -->
+      <section class="box">
+        <h2 class="sec"><span class="no">00</span>Settings</h2>
+        <label class="fl"><span class="mono">GitHub token</span><input id="token" type="password" autocomplete="off" spellcheck="false"></label>
+        <details class="help"><summary>How to get a token</summary>
+          <ol>
+            <li>On GitHub: Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token.</li>
+            <li>Repository access: <b>Only select repositories</b> → <code>truescale</code>.</li>
+            <li>Permissions → Repository → <b>Contents: Read and write</b>.</li>
+            <li>Generate, copy, paste it here. It stays on this device only.</li>
+          </ol>
+        </details>
+        <div class="two">
+          <label class="fl"><span class="mono">Repository</span><input id="repo" spellcheck="false"></label>
+          <label class="fl"><span class="mono">Branch</span><input id="branch" spellcheck="false"></label>
+        </div>
+        <label class="fl"><span class="mono">Studio passphrase</span><input id="pass" type="password" autocomplete="off"></label>
+        <p class="fine" style="margin:6px 0 0">Every unlock key is made from this passphrase. Use a long one you won't forget — if you change it, old orders can't be unlocked anymore.</p>
+        <label class="chk"><input type="checkbox" id="remember"> Remember on this device</label>
+        <div class="acts"><button class="btn" type="button" id="save"><span>Save & check</span></button></div>
+        <div class="log" id="setLog" hidden></div>
+      </section>
+
+      <!-- orders -->
+      <section class="box">
+        <h2 class="sec"><span class="no">02</span>Orders online</h2>
+        <div class="acts" style="margin-top:0"><button class="btn out" type="button" id="load"><span>Load orders</span></button></div>
+        <div id="orders"></div>
+      </section>
+    </div>
+
+    <!-- new delivery -->
+    <section class="box">
+      <h2 class="sec"><span class="no">01</span>New delivery</h2>
+      <div class="two">
+        <label class="fl"><span class="mono">Order no.</span><input id="ref" placeholder="BAZ-XXXXX" spellcheck="false"></label>
+        <label class="fl"><span class="mono">Client WhatsApp</span><input id="phone" type="tel" inputmode="tel" placeholder="01xxxxxxxxx" dir="ltr"></label>
+      </div>
+      <label class="fl"><span class="mono">Title (client sees this)</span><input id="title" placeholder="Kitchen — K-01"></label>
+      <div class="two">
+        <label class="fl"><span class="mono">Total (EGP)</span><input id="total" type="number" inputmode="numeric" min="0"></label>
+        <label class="fl"><span class="mono">Already paid (EGP)</span><input id="paid" type="number" inputmode="numeric" min="0"></label>
+      </div>
+      <label class="fl"><span class="mono">Message language</span>
+        <select id="mlang"><option value="ar">Arabic</option><option value="en">English</option></select></label>
+      <label class="drop" id="drop"><input type="file" id="fileIn" multiple><span class="mono">+ Add final files (images, PDF, any file)</span></label>
+      <div class="files" id="fileList"></div>
+      <p class="fine">Images and PDFs get a pixelated preview. All files are encrypted on this device before upload — the client can only open them with the unlock link.</p>
+      <div class="err" id="err" hidden></div>
+      <div class="acts"><button class="btn" type="button" id="publish"><span>Publish delivery</span><span>→</span></button></div>
+      <div class="log" id="log" hidden></div>
+
+      <div id="result" hidden style="margin-top:18px">
+        <h2 class="sec" style="font-size:20px">Ready</h2>
+        <p class="fine" style="margin-top:0">The page goes live in about 1–2 minutes.</p>
+        <div class="links">
+          <div class="r"><span class="mono">Preview</span><input id="pvLink" readonly><button class="cp" type="button" data-copyof="pvLink">Copy</button></div>
+          <div class="r"><span class="mono red">Unlock</span><input id="ulLink" readonly><button class="cp" type="button" data-copyof="ulLink">Copy</button></div>
+        </div>
+        <div class="acts">
+          <a class="btn wa" id="sendPv" target="_blank" rel="noopener"><span>Send preview to client</span></a>
+          <a class="btn out" id="sendUl" target="_blank" rel="noopener"><span>Send unlock link (after payment)</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+const PREVIEW_PX = 64;          // long side of the pixelated preview, in pixels
+const MAX_PDF_PAGES = 12;
+const ROOT = 'design/orders';
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money = n => Math.round(n).toLocaleString('en-US') + ' EGP';
+const S = (() => { try { return JSON.parse(localStorage.getItem('bazStudio') || '{}'); } catch(e) { return {}; } })();
+$('token').value = S.token || ''; $('repo').value = S.repo || 'belalabouzeina13-sketch/truescale'; $('branch').value = S.branch || 'main';
+$('pass').value = S.pass || ''; $('remember').checked = !!S.pass;
+let files = [], masterCache = null;
+
+const cfg = () => ({ token: $('token').value.trim(), repo: $('repo').value.trim(), branch: $('branch').value.trim() || 'main', pass: $('pass').value });
+function persist(){
+  const c = cfg(); const o = { token: c.token, repo: c.repo, branch: c.branch };
+  if ($('remember').checked) o.pass = c.pass;
+  try { localStorage.setItem('bazStudio', JSON.stringify(o)); } catch(e){}
+}
+async function master(){
+  const p = cfg().pass;
+  if (!p || p.length < 8) throw new Error('Set a studio passphrase (at least 8 characters).');
+  if (!masterCache || masterCache.p !== p) masterCache = { p, k: await Vault.master(p) };
+  return masterCache.k;
+}
+const orderKey = async id => Vault.aesKey(await Vault.orderKeyRaw(await master(), id));
+const siteBase = () => new URL('../o/', location.href).href;
+const links = async id => { const raw = await Vault.orderKeyRaw(await master(), id); const pv = `${siteBase()}?id=${id}`; return { pv, ul: `${pv}#k=${Vault.b64url(raw)}` }; };
+const waNum = p => { let d = String(p || '').replace(/\D/g, ''); if (d.startsWith('00')) d = d.slice(2); if (d.startsWith('0')) d = '2' + d; return d; };
+const wa = (phone, text) => `https://wa.me/${waNum(phone)}?text=${encodeURIComponent(text)}`;
+const MSG = {
+  ar: { pv: (r, l, b) => `أهلاً 👋 تصميمك (${r}) جاهز!\nتقدر تعاينه هنا:\n${l}\n\nالباقي: ${b}. بعد ما تدفع الباقي بإنستاباي هبعتلك لينك تحميل الملفات كاملة.`,
+        ul: (r, l) => `تم استلام الدفع، شكراً! 🙏\nملفات (${r}) مفتوحة للتحميل هنا:\n${l}\n\nخلّي اللينك ده خاص بيك.` },
+  en: { pv: (r, l, b) => `Hi 👋 your design (${r}) is ready!\nPreview it here:\n${l}\n\nBalance: ${b}. Once you pay the balance by InstaPay I'll send your download link.`,
+        ul: (r, l) => `Payment received, thank you! 🙏\nYour files for ${r} are unlocked here:\n${l}\n\nPlease keep this link private.` }
+};
+
+/* ---------- GitHub ---------- */
+async function gh(path, opts = {}){
+  const c = cfg();
+  if (!c.token) throw new Error('Add your GitHub token in Settings.');
+  const r = await fetch(`https://api.github.com/repos/${c.repo}${path}`, { ...opts, headers: { Authorization: `Bearer ${c.token}`, Accept: opts.raw ? 'application/vnd.github.raw' : 'application/vnd.github+json', ...(opts.body ? {'Content-Type':'application/json'} : {}) } });
+  if (!r.ok) { const e = new Error(`GitHub ${r.status}: ${(await r.text()).slice(0, 160)}`); e.status = r.status; throw e; }
+  return opts.raw ? r.text() : r.json();
+}
+const blob = (b64) => gh('/git/blobs', { method: 'POST', body: JSON.stringify({ content: b64, encoding: 'base64' }) }).then(r => r.sha);
+async function commit(entries, message){
+  const br = cfg().branch;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const ref = await gh(`/git/ref/heads/${br}`);
+    const head = await gh(`/git/commits/${ref.object.sha}`);
+    const tree = await gh('/git/trees', { method: 'POST', body: JSON.stringify({ base_tree: head.tree.sha, tree: entries }) });
+    const c = await gh('/git/commits', { method: 'POST', body: JSON.stringify({ message, tree: tree.sha, parents: [ref.object.sha] }) });
+    try { await gh(`/git/refs/heads/${br}`, { method: 'PATCH', body: JSON.stringify({ sha: c.sha }) }); return; }
+    catch (e) { if (e.status !== 422 || attempt === 2) throw e; }
+  }
+}
+async function studioCheck(){
+  try { return JSON.parse(await gh(`/contents/${ROOT}/_studio.json?ref=${cfg().branch}`, { raw: true })); }
+  catch (e) { if (e.status === 404) return null; throw e; }
+}
+
+/* ---------- previews ---------- */
+function shrink(src, w, h){
+  const s = PREVIEW_PX / Math.max(w, h), c = document.createElement('canvas');
+  c.width = Math.max(1, Math.round(w * s)); c.height = Math.max(1, Math.round(h * s));
+  const x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(src, 0, 0, c.width, c.height);
+  return new Promise(r => c.toBlob(r, 'image/jpeg', 0.8));
+}
+let pdfjs = null;
+function loadPdf(){
+  if (pdfjs) return pdfjs;
+  return pdfjs = new Promise((ok, no) => {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    s.onload = () => { pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; ok(pdfjsLib); };
+    s.onerror = () => { pdfjs = null; no(new Error('Could not load the PDF reader')); };
+    document.head.appendChild(s);
+  });
+}
+async function previews(file, buf){
+  const type = file.type || '';
+  if (type.startsWith('image/')) {
+    try { const b = await createImageBitmap(file); const p = await shrink(b, b.width, b.height); b.close?.(); return { kind: 'image', blobs: [p] }; }
+    catch (e) { return { kind: 'other', blobs: [] }; }
+  }
+  if (type === 'application/pdf' || /\.pdf$/i.test(file.name)) {
+    try {
+      const lib = await loadPdf();
+      const doc = await lib.getDocument({ data: buf.slice(0) }).promise;
+      const out = [];
+      for (let i = 1; i <= Math.min(doc.numPages, MAX_PDF_PAGES); i++) {
+        const pg = await doc.getPage(i), vp0 = pg.getViewport({ scale: 1 }), vp = pg.getViewport({ scale: 600 / Math.max(vp0.width, vp0.height) });
+        const c = document.createElement('canvas'); c.width = vp.width; c.height = vp.height;
+        const ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height);
+        await pg.render({ canvasContext: ctx, viewport: vp }).promise;
+        out.push(await shrink(c, c.width, c.height));
+      }
+      return { kind: 'pdf', blobs: out, pages: doc.numPages };
+    } catch (e) { return { kind: 'other', blobs: [] }; }
+  }
+  return { kind: 'other', blobs: [] };
+}
+
+/* ---------- UI: files ---------- */
+function showFiles(){
+  $('fileList').innerHTML = files.map((f, i) => `<div class="r"><span>${esc(f.name)} <span class="mono muted">${(f.size/1048576).toFixed(1)} MB</span></span><button class="cp" type="button" data-rm="${i}">Remove</button></div>`).join('');
+}
+function addFiles(list){ files = files.concat(Array.from(list)); showFiles(); }
+$('fileIn').addEventListener('change', e => { addFiles(e.target.files); e.target.value = ''; });
+['dragover','dragenter'].forEach(ev => $('drop').addEventListener(ev, e => { e.preventDefault(); $('drop').classList.add('over'); }));
+['dragleave','drop'].forEach(ev => $('drop').addEventListener(ev, e => { e.preventDefault(); $('drop').classList.remove('over'); if (ev === 'drop') addFiles(e.dataTransfer.files); }));
+
+function log(el, s){ el.hidden = false; el.textContent += s + '\n'; el.scrollTop = el.scrollHeight; }
+
+/* ---------- settings ---------- */
+$('save').addEventListener('click', async () => {
+  const L = $('setLog'); L.textContent = ''; persist();
+  try {
+    log(L, 'Checking GitHub access…');
+    const r = await gh(''); if (!r.permissions?.push) throw new Error('This token cannot write to the repository.');
+    log(L, '✓ GitHub OK');
+    const chk = await studioCheck();
+    if (!chk) log(L, 'No passphrase set yet — it will be saved with your first delivery.');
+    else log(L, (await Vault.testCheck(await orderKey('_studio'), chk.check)) ? '✓ Passphrase matches' : '✗ Passphrase does NOT match the one used before.');
+  } catch (e) { log(L, '✗ ' + e.message); }
+});
+
+/* ---------- publish ---------- */
+$('publish').addEventListener('click', async () => {
+  const err = $('err'), L = $('log'); err.hidden = true; $('result').hidden = true;
+  const ref = $('ref').value.trim(), title = $('title').value.trim(), total = +$('total').value || 0, paid = +$('paid').value || 0, phone = $('phone').value.trim();
+  const fail = m => { err.textContent = m; err.hidden = false; };
+  if (!ref || !title) return fail('Add the order number and a title.');
+  if (!files.length) return fail('Add the final files.');
+  if (waNum(phone).length < 10) return fail("Add the client's WhatsApp number.");
+  const btn = $('publish'); btn.disabled = true; L.textContent = ''; persist();
+  try {
+    const m = await master();
+    const chk = await studioCheck();
+    if (chk && !(await Vault.testCheck(await orderKey('_studio'), chk.check))) throw new Error('Passphrase does not match the one used for earlier orders.');
+    const id = Vault.randomId(12), key = await orderKey(id), dir = `${ROOT}/${id}`, entries = [];
+    const add = async (path, b64) => entries.push({ path: `${dir}/${path}`, mode: '100644', type: 'blob', sha: await blob(b64) });
+    const man = { v: 1, id, ref, title, total, paid, created: new Date().toISOString(), check: await Vault.makeCheck(key), files: [] };
+    for (let i = 0; i < files.length; i++) {
+      const f = files[i]; log(L, `[${i+1}/${files.length}] ${f.name}`);
+      const buf = await f.arrayBuffer();
+      const pv = await previews(f, buf);
+      const names = [];
+      for (let j = 0; j < pv.blobs.length; j++) { const n = `p${i}-${j}.jpg`; await add(n, Vault.b64(await pv.blobs[j].arrayBuffer())); names.push(n); }
+      const e = await Vault.encrypt(key, buf);
+      log(L, `   encrypted, uploading ${(f.size/1048576).toFixed(1)} MB…`);
+      await add(`f${i}.bin`, Vault.b64(e.ct));
+      man.files.push({ name: f.name, mime: f.type || '', size: f.size, kind: pv.kind, pages: pv.pages, iv: e.iv, bin: `f${i}.bin`, previews: names });
+    }
+    const sec = await Vault.encrypt(key, new TextEncoder().encode(JSON.stringify({ phone })));
+    man.secret = { iv: sec.iv, ct: Vault.b64(sec.ct) };
+    await add('manifest.json', Vault.b64(new TextEncoder().encode(JSON.stringify(man, null, 1))));
+    if (!chk) entries.push({ path: `${ROOT}/_studio.json`, mode: '100644', type: 'blob', sha: await blob(Vault.b64(new TextEncoder().encode(JSON.stringify({ check: await Vault.makeCheck(await orderKey('_studio')) })))) });
+    log(L, 'Publishing…');
+    await commit(entries, `Delivery ${ref}`);
+    log(L, '✓ Published');
+    const l = await links(id), bal = money(total - paid), ml = $('mlang').value;
+    $('pvLink').value = l.pv; $('ulLink').value = l.ul;
+    $('sendPv').href = wa(phone, MSG[ml].pv(ref, l.pv, bal));
+    $('sendUl').href = wa(phone, MSG[ml].ul(ref, l.ul));
+    $('result').hidden = false;
+    files = []; showFiles();
+  } catch (e) { log(L, '✗ ' + e.message); fail(e.message); }
+  btn.disabled = false;
+});
+
+/* ---------- orders ---------- */
+let orders = [];
+$('load').addEventListener('click', async () => {
+  const box = $('orders'); box.innerHTML = '<p class="mono muted">Loading…</p>'; persist();
+  try {
+    let list = [];
+    try { list = await gh(`/contents/${ROOT}?ref=${cfg().branch}`); } catch (e) { if (e.status !== 404) throw e; }
+    const dirs = list.filter(x => x.type === 'dir');
+    orders = (await Promise.all(dirs.map(async d => {
+      try { const m = JSON.parse(await gh(`/contents/${ROOT}/${d.name}/manifest.json?ref=${cfg().branch}`, { raw: true }));
+        try { const k = await orderKey(m.id); m.phone = JSON.parse(new TextDecoder().decode(await Vault.decrypt(k, m.secret.iv, Vault.unb64(m.secret.ct)))).phone; } catch(_) {}
+        return m; } catch (e) { return null; }
+    }))).filter(Boolean).sort((a, b) => b.created.localeCompare(a.created));
+    if (!orders.length) { box.innerHTML = '<p class="fine">No deliveries yet.</p>'; return; }
+    box.innerHTML = orders.map((o, i) => `<div class="order">
+      <div class="top"><b>${esc(o.ref)} — ${esc(o.title)}</b><span class="mono muted">${o.created.slice(0,10)}</span></div>
+      <div class="mono muted">${o.files.length} files · balance ${money(o.total - o.paid)}${o.phone ? ' · ' + esc(o.phone) : ''}</div>
+      <div class="acts">
+        <button class="link" type="button" data-act="pv" data-i="${i}">Send preview</button>
+        <button class="link" type="button" data-act="ul" data-i="${i}">Send unlock link</button>
+        <button class="link" type="button" data-act="copy" data-i="${i}">Copy unlock link</button>
+        <button class="link red" type="button" data-act="del" data-i="${i}">Delete</button>
+      </div></div>`).join('');
+  } catch (e) { box.innerHTML = `<p class="err">${esc(e.message)}</p>`; }
+});
+
+document.addEventListener('click', async e => {
+  const rm = e.target.closest('[data-rm]'); if (rm) { files.splice(+rm.dataset.rm, 1); showFiles(); return; }
+  const cp = e.target.closest('[data-copyof]');
+  if (cp) { navigator.clipboard?.writeText($(cp.dataset.copyof).value).then(() => { cp.textContent = 'Copied'; setTimeout(() => cp.textContent = 'Copy', 1500); }); return; }
+  const a = e.target.closest('[data-act]'); if (!a) return;
+  const o = orders[+a.dataset.i], ml = $('mlang').value;
+  try {
+    if (a.dataset.act === 'del') {
+      if (!confirm(`Delete ${o.ref} from the website? The client's link will stop working.`)) return;
+      a.textContent = 'Deleting…';
+      const items = await gh(`/contents/${ROOT}/${o.id}?ref=${cfg().branch}`);
+      await commit(items.map(x => ({ path: x.path, mode: '100644', type: 'blob', sha: null })), `Remove delivery ${o.ref}`);
+      a.closest('.order').remove(); return;
+    }
+    const l = await links(o.id);
+    if (!(await Vault.testCheck(await orderKey(o.id), o.check))) throw new Error('Passphrase does not match this order.');
+    if (a.dataset.act === 'copy') { await navigator.clipboard.writeText(l.ul); a.textContent = 'Copied'; setTimeout(() => a.textContent = 'Copy unlock link', 1500); return; }
+    const phone = o.phone || prompt("Client's WhatsApp number:");
+    if (!phone) return;
+    window.open(a.dataset.act === 'pv' ? wa(phone, MSG[ml].pv(o.ref, l.pv, money(o.total - o.paid))) : wa(phone, MSG[ml].ul(o.ref, l.ul)), '_blank', 'noopener');
+  } catch (err) { alert(err.message); }
+});
+</script>
+</body>
+</html>

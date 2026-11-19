@@ -11,14 +11,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
+<script src="assets/contact.js"></script>
 <script>
 /* =====================================================================
    EDIT THIS BLOCK ONLY — prices, scope, contact, payment.
    ===================================================================== */
 const CONFIG = {
-  whatsapp: "201000000000",          // international format, digits only (20 + number without first 0)
+  whatsapp: CONTACT.whatsapp,        // WhatsApp + InstaPay numbers live in assets/contact.js
   instagram: "",                     // e.g. "bilalabouzeina"
-  instapay: "",                      // e.g. "bilal@instapay"   ("" = hidden)
+  instapay: CONTACT.instapay,
   vodafoneCash: "",                  // e.g. "01000000000"      ("" = hidden)
 
   // The design from your latest viral video: gets the stamp and moves to the top.
@@ -26,35 +27,43 @@ const CONFIG = {
 
   currency: { en: "EGP", ar: "ج.م" },
 
-  // Fixed-price designs. payLink = card payment link (Paymob / Kashier / Fawry), optional.
+  // Share paid upfront for every order (0.5 = 50%). The rest is paid to unlock the final files.
+  // Any service can override it with its own deposit: 1 = full payment upfront.
+  deposit: 0.5,
+
+  // Fixed-price designs. price: null hides a design from the page. payLink = card payment link (Paymob / Kashier / Fawry), optional.
   packages: [
-    { id: "kitchen", code: "K-01", price: 5000, days: 5, payLink: "",
+    { id: "kitchen", code: "K-01", price: 2500, days: 5, payLink: "",
       name:  { en: "Kitchen", ar: "مطبخ" },
-      scope: { en: "Up to 4 m of cabinets · 3D renders · layout & elevations with dimensions · 1 revision. Extra meter: 600 EGP.",
-               ar: "حتى ٤ متر وحدات · صور 3D · توزيع وواجهات بالمقاسات · تعديل واحد. المتر الزيادة: ٦٠٠ ج.م." } },
-    { id: "bathroom", code: "B-01", price: 3500, days: 4, payLink: "",
+      scope: { en: "Up to 4 m of cabinets · 3D renders · layout & elevations with dimensions · 1 revision.",
+               ar: "حتى ٤ متر وحدات · صور 3D · توزيع وواجهات بالمقاسات · تعديل واحد." } },
+    { id: "bathroom", code: "B-01", price: 1500, days: 4, payLink: "",
       name:  { en: "Bathroom", ar: "حمام" },
       scope: { en: "One bathroom up to 6 m² · 3D renders · tile layout & wall elevations · 1 revision.",
                ar: "حمام واحد حتى ٦ م² · صور 3D · توزيع السيراميك وواجهات الحوائط · تعديل واحد." } },
-    { id: "tv", code: "T-01", price: 2500, days: 3, payLink: "",
+    { id: "tv", code: "T-01", price: null, days: 3, payLink: "",
       name:  { en: "TV Unit", ar: "وحدة تليفزيون" },
       scope: { en: "One TV wall up to 4 m wide · 3D render · execution drawing with dimensions · 1 revision.",
                ar: "حائط واحد حتى ٤ متر عرض · صورة 3D · رسم تنفيذي بالمقاسات · تعديل واحد." } },
+    { id: "wardrobe", code: "W-01", price: 1000, days: 3, payLink: "",
+      name:  { en: "Wardrobe", ar: "دولاب" },
+      scope: { en: "One wardrobe · 3D render · inside layout & execution drawing with dimensions · 1 revision.",
+               ar: "دولاب واحد · صورة 3D · تقسيم داخلي ورسم تنفيذي بالمقاسات · تعديل واحد." } },
     { id: "dressing", code: "D-01", price: 3000, days: 4, payLink: "",
       name:  { en: "Dressing Room", ar: "غرفة ملابس" },
       scope: { en: "Up to 3 walls · 3D renders · shelving layout with dimensions · 1 revision.",
                ar: "حتى ٣ حوائط · صور 3D · توزيع الأرفف بالمقاسات · تعديل واحد." } }
   ],
 
-  // Per-square-meter work. deposit = share paid now (0.5 = 50%); 1 = full payment.
+  // Per-square-meter work. Client sets the area, total = area × rate.
   perMeter: [
-    { id: "2d",   code: "P-2D", rate: 50,  min: 50, days: 5,  deposit: 0.5, payLink: "",
+    { id: "2d",   code: "P-2D", rate: 50,  min: 50, days: 5,  payLink: "",
       name: { en: "2D Layout", ar: "توزيع 2D" },
       desc: { en: "Furniture layout for the whole unit.", ar: "توزيع الأثاث للوحدة كاملة." } },
-    { id: "3d",   code: "P-3D", rate: 200, min: 50, days: 10, deposit: 0.5, payLink: "",
+    { id: "3d",   code: "P-3D", rate: 200, min: 50, days: 10, payLink: "",
       name: { en: "3D Interior", ar: "تصميم 3D" },
       desc: { en: "Full 3D design, realistic renders of every room.", ar: "تصميم 3D كامل بصور واقعية لكل الغرف." } },
-    { id: "tech", code: "P-3T", rate: 250, min: 50, days: 14, deposit: 0.5, payLink: "",
+    { id: "tech", code: "P-3T", rate: 250, min: 50, days: 14, payLink: "",
       name: { en: "3D + Technical Drawings", ar: "3D + رسومات تنفيذية" },
       desc: { en: "Full 3D design plus execution drawings: electrical, plumbing, ceilings, flooring.", ar: "تصميم 3D كامل مع رسومات تنفيذية: كهرباء، سباكة، أسقف، أرضيات." } }
   ],
@@ -276,6 +285,9 @@ html[lang="en"] .wo h3{font-stretch:115%;text-transform:uppercase}
 .manual code{font-family:var(--mono);font-weight:600;direction:ltr;unicode-bidi:embed}
 .manual .cp{font-family:var(--mono);font-size:12px;font-weight:600;border-bottom:1.5px solid var(--ink);padding:2px 0}
 .manual .btn{margin-top:12px}
+.shot{display:block;margin-top:12px;border:1.5px dashed var(--ink);padding:12px;text-align:center;cursor:pointer}
+.shot input{position:absolute;opacity:0;width:1px;height:1px}
+.shot:focus-within{outline:2px solid var(--red)}
 .fine{font-size:13px;color:var(--ink-2);margin:14px 0 0}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
@@ -341,7 +353,7 @@ html[lang="en"] .wo h3{font-stretch:115%;text-transform:uppercase}
           <path d="M92 132l52 40"/>
         </g>
         <g class="r"><rect x="144" y="170" width="74" height="20" fill="currentColor"/></g>
-        <text x="181" y="183.5" text-anchor="middle" style="fill:var(--paper);font-weight:600">K-01 · 5,000</text>
+        <text x="181" y="183.5" text-anchor="middle" style="fill:var(--paper);font-weight:600">K-01 · 2,500</text>
       </svg>
       <figcaption class="plan-cap mono muted"><span data-t="figL"></span><span>1:50</span></figcaption>
     </figure>
@@ -429,25 +441,27 @@ const T = {
     h2: "Priced by area", p2: "Set your area on the scale — every price updates.",
     areaL: "Area (m²)", perM: "{r} / m²", min: "min. {n} m²",
     deposit: "Pay {p}% now", h3: "Procedure",
-    proc: [["Choose", "A fixed design, or set your area."], ["Pay", "Card, InstaPay or wallet."], ["Send your plan", "Plan, photos and measurements on WhatsApp, with your order number."], ["Receive", "Your drawings, on the stated date. Revisions included."]],
+    proc: [["Choose & pay 50%", "Pick a design, pay the deposit by InstaPay and send the screenshot."], ["Send your plan", "Plan, photos and measurements on WhatsApp, with your order number."], ["Preview", "When the work is ready you get a private link to see it — locked and pixelated."], ["Pay the rest, download", "Pay the balance and the full files unlock for download."]],
     h4: "Recent work", h5: "General notes",
     notes: [
       ["Measurements are supplied by the client.", "A plan or a hand sketch with dimensions is enough. Site visits are quoted separately."],
       ["Delivery time starts on receipt of payment and all details.", "Working days, excluding Fridays and public holidays."],
       ["One round of revisions is included.", "Further revisions are charged per round."],
       ["Design only.", "You receive files ready for any carpenter or contractor. Supply and execution are not included."],
-      ["Refunds.", "Full refund before work starts. Once drawing has started, the payment is not refundable."],
+      ["Refunds.", "Full refund before work starts. Once drawing has started, the deposit is not refundable."],
+      ["Final files are released on full payment.", "You can preview the finished work first; downloads unlock once the balance is paid."],
       ["Work beyond the stated scope is quoted separately.", "Larger kitchens, extra walls or extra rooms — ask before ordering."]
     ],
     cH: "Something not on the schedule?", cP: "A full villa, a shop, a custom piece — write to me directly.",
     wa: "WhatsApp", order: "Order", days: "{n} working days", close: "Close",
     woNo: "Work order {id}", fName: "Name", fPhone: "Phone / WhatsApp", fNotes: "Notes (optional)",
     errReq: "Enter your name and phone number.", errArea: "Enter the area — minimum {n} m².",
-    lService: "Item", lArea: "Area", lTotal: "Total", lDue: "Due now", lRest: "Balance on delivery",
+    lService: "Item", lArea: "Area", lTotal: "Total", lDue: "Due now", lRest: "Balance — to unlock files",
     payH: "Payment", payCard: "Pay by card", payWa: "Send order on WhatsApp",
     instapay: "InstaPay", vcash: "Vodafone Cash", copy: "Copy", copied: "Copied",
-    paid: "I've paid — send details",
-    payNote: "After paying, send the payment screenshot with your plan on WhatsApp. Your order number is attached automatically.",
+    paid: "Send order + screenshot",
+    attach: "+ Attach payment screenshot", errShot: "Attach the screenshot of your InstaPay transfer.",
+    payNote: "Transfer the deposit by InstaPay to the number above, attach the screenshot, then send. Choose WhatsApp when asked — your order details go with it.",
     tStudio: "Studio", tContact: "Contact", tSheet: "Sheet", tDate: "Date",
     waOrder: "Hello, work order {id}", waMethod: "Payment", waPaid: "paid", waCustom: "Hello, I'd like to ask about a custom design.",
     latest: "From the latest video"
@@ -462,25 +476,27 @@ const T = {
     h2: "بالمساحة", p2: "حرّك المسطرة على مساحتك — كل الأسعار بتتحسب.",
     areaL: "المساحة (م²)", perM: "{r} / م²", min: "أقل مساحة {n} م²",
     deposit: "ادفع {p}٪ دلوقتي", h3: "الخطوات",
-    proc: [["اختار", "تصميم بسعر ثابت، أو حدد مساحتك."], ["ادفع", "كارت، إنستاباي أو محفظة."], ["ابعت المخطط", "المخطط والصور والمقاسات على واتساب برقم الطلب."], ["استلم", "الرسومات في الميعاد المحدد. والتعديل مشمول."]],
+    proc: [["اختار وادفع ٥٠٪", "اختار التصميم، ادفع العربون بإنستاباي وابعت صورة التحويل."], ["ابعت المخطط", "المخطط والصور والمقاسات على واتساب برقم الطلب."], ["معاينة", "لما الشغل يخلص هيوصلك لينك خاص تشوفه — مقفول ومش واضح."], ["ادفع الباقي ونزّل", "ادفع الباقي والملفات الكاملة تتفتح للتحميل."]],
     h4: "شغل حديث", h5: "ملاحظات عامة",
     notes: [
       ["المقاسات مسؤولية العميل.", "مخطط أو رسم بالإيد بالمقاسات كفاية. المعاينة في الموقع بسعر منفصل."],
       ["مدة التسليم تبدأ من وصول الدفع وكل التفاصيل.", "أيام عمل، من غير الجمعة والإجازات الرسمية."],
       ["تعديل واحد مشمول.", "التعديلات الزيادة بتتحسب لكل مرة."],
       ["تصميم فقط.", "هتستلم ملفات جاهزة لأي نجار أو مقاول. التوريد والتنفيذ مش مشمولين."],
-      ["الاسترجاع.", "استرجاع كامل قبل بداية الشغل. بعد ما الرسم يبدأ، المبلغ مش بيترجع."],
+      ["الاسترجاع.", "استرجاع كامل قبل بداية الشغل. بعد ما الرسم يبدأ، العربون مش بيترجع."],
+      ["الملفات النهائية بتتسلم بعد الدفع الكامل.", "تقدر تعاين الشغل الأول؛ والتحميل بيتفتح بعد دفع الباقي."],
       ["أي شغل أكبر من المحتوى المكتوب بيتسعّر لوحده.", "مطبخ أكبر، حوائط أو أوض زيادة — اسأل قبل ما تطلب."]
     ],
     cH: "مش لاقي طلبك في الجدول؟", cP: "فيلا كاملة، محل، أو قطعة خاصة — كلمني مباشرة.",
     wa: "واتساب", order: "اطلب", days: "{n} أيام عمل", close: "إغلاق",
     woNo: "أمر شغل {id}", fName: "الاسم", fPhone: "الموبايل / واتساب", fNotes: "ملاحظات (اختياري)",
     errReq: "اكتب الاسم ورقم الموبايل.", errArea: "اكتب المساحة — أقل حاجة {n} م².",
-    lService: "البند", lArea: "المساحة", lTotal: "الإجمالي", lDue: "المطلوب دلوقتي", lRest: "الباقي عند التسليم",
+    lService: "البند", lArea: "المساحة", lTotal: "الإجمالي", lDue: "المطلوب دلوقتي", lRest: "الباقي — لفتح الملفات",
     payH: "الدفع", payCard: "ادفع بالكارت", payWa: "ابعت الطلب على واتساب",
     instapay: "إنستاباي", vcash: "فودافون كاش", copy: "نسخ", copied: "اتنسخ",
-    paid: "دفعت — ابعت التفاصيل",
-    payNote: "بعد الدفع ابعت صورة التحويل مع المخطط على واتساب. رقم الطلب بيتبعت تلقائي.",
+    paid: "ابعت الطلب + صورة التحويل",
+    attach: "+ أرفق صورة التحويل", errShot: "أرفق صورة تحويل إنستاباي.",
+    payNote: "حوّل العربون بإنستاباي على الرقم اللي فوق، أرفق صورة التحويل، وبعدين ابعت. اختار واتساب — وتفاصيل الطلب هتتبعت معاها.",
     tStudio: "الاستوديو", tContact: "تواصل", tSheet: "لوحة", tDate: "التاريخ",
     waOrder: "أهلاً، أمر شغل {id}", waMethod: "الدفع", waPaid: "تم", waCustom: "أهلاً، عايز أسأل عن تصميم خاص.",
     latest: "من آخر فيديو"
@@ -500,7 +516,8 @@ const waLink = s => `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(
 const ARR = '<span class="arr flip">→</span>';
 const WA = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.8 11.9 11.9 0 004.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.4-.2z"/></svg>';
 
-const pkgs = () => { const p = CONFIG.packages.slice(); const i = p.findIndex(x => x.id === CONFIG.featured); if (i > 0) p.unshift(p.splice(i,1)[0]); return p; };
+const pkgs = () => { const p = CONFIG.packages.filter(x => x.price != null); const i = p.findIndex(x => x.id === CONFIG.featured); if (i > 0) p.unshift(p.splice(i,1)[0]); return p; };
+const dep = x => x.deposit ?? CONFIG.deposit;
 const stamp = id => id === CONFIG.featured ? `<span class="stamp">${t('latest')}</span>` : '';
 
 function renderMeter(){
@@ -512,7 +529,7 @@ function renderMeter(){
       <div class="tot">${money(tot)}<small>${t('perM',{r:num(m.rate)})}</small></div>
       <p class="d">${esc(L(m.desc))} <span class="mono">· ${t('min',{n:m.min})} · ${t('days',{n:m.days})}</span></p>
       <div class="act"><button class="order" type="button" data-order="${m.id}">${t('order')} ${ARR}</button>
-        ${m.deposit < 1 ? `<span class="mono muted">${t('deposit',{p:Math.round(m.deposit*100)})} — ${money(tot*m.deposit)}</span>` : ''}</div>
+        ${dep(m) < 1 ? `<span class="mono muted">${t('deposit',{p:Math.round(dep(m)*100)})} — ${money(tot*dep(m))}</span>` : ''}</div>
     </div>`; }).join('');
 }
 
@@ -528,7 +545,8 @@ function render(){
       <h3 class="nm">${esc(L(p.name))}</h3>
       <p class="sc">${esc(L(p.scope))}</p>
       <div class="pr">${money(p.price)}<small>${t('days',{n:p.days})}</small></div>
-      <div class="act"><button class="order" type="button" data-order="${p.id}">${t('order')} ${ARR}</button></div>
+      <div class="act"><button class="order" type="button" data-order="${p.id}">${t('order')} ${ARR}</button>
+        ${dep(p) < 1 ? `<span class="mono muted">${t('deposit',{p:Math.round(dep(p)*100)})} — ${money(p.price*dep(p))}</span>` : ''}</div>
     </div>`).join('');
 
   renderMeter();
@@ -551,8 +569,8 @@ function render(){
 
 /* ---------- work order ---------- */
 let cur = null, oid = '';
-const find = id => { const p = CONFIG.packages.find(x => x.id === id); if (p) return {...p, kind:'pkg', deposit:1};
-  const m = CONFIG.perMeter.find(x => x.id === id); return m ? {...m, kind:'m2'} : null; };
+const find = id => { const p = CONFIG.packages.find(x => x.id === id); if (p) return {...p, kind:'pkg', deposit: p.deposit ?? CONFIG.deposit};
+  const m = CONFIG.perMeter.find(x => x.id === id); return m ? {...m, kind:'m2', deposit: m.deposit ?? CONFIG.deposit} : null; };
 const woArea = () => { const a = parseFloat($('woArea').value); return isFinite(a) ? a : 0; };
 const total = () => cur.kind === 'pkg' ? cur.price : Math.max(woArea(), cur.min) * cur.rate;
 const due = () => total() * (cur.deposit ?? 1);
@@ -580,6 +598,8 @@ function pay(){
   if (CONFIG.instapay) man.push(['instapay', CONFIG.instapay]);
   if (CONFIG.vodafoneCash) man.push(['vcash', CONFIG.vodafoneCash]);
   if (man.length) h += `<div class="manual">${man.map(([k,v]) => `<div class="r"><span>${t(k)} <code>${esc(v)}</code></span><button type="button" class="cp" data-copy="${esc(v)}">${t('copy')}</button></div>`).join('')}
+    <div class="r"><span>${t('lDue')}</span><code>${money(due())}</code></div>
+    <label class="shot"><input type="file" accept="image/*" id="shot"><span class="mono" id="shotL">${t('attach')}</span></label>
     <button type="button" class="btn wa" style="width:100%;justify-content:space-between" data-pay="manual"><span>${t('paid')}</span>${WA}</button></div>`;
   if (!h) h = `<button type="button" class="btn wa" data-pay="wa"><span>${t('payWa')}</span>${WA}</button>`;
   $('payBox').innerHTML = h;
@@ -622,6 +642,7 @@ function setArea(v, from){
 $('area').addEventListener('input', e => setArea(parseFloat(e.target.value), 'num'));
 $('rule').addEventListener('input', e => setArea(parseFloat(e.target.value), 'rule'));
 $('woArea').addEventListener('input', () => { lines(); pay(); });
+document.addEventListener('change', e => { if (e.target.id === 'shot') { const f = e.target.files[0]; $('shotL').textContent = f ? '✓ ' + f.name : t('attach'); $('woErr').hidden = true; } });
 document.addEventListener('click', e => {
   const lb = e.target.closest('[data-lang]');
   if (lb) { lang = lb.dataset.lang; try { localStorage.setItem('bazLang', lang); } catch(_){} render(); return; }
@@ -639,7 +660,12 @@ document.addEventListener('click', e => {
     }
     const m = k === 'after' ? `${t('payCard')} — ${t('waPaid')}`
       : k === 'manual' ? [CONFIG.instapay && t('instapay'), CONFIG.vodafoneCash && t('vcash')].filter(Boolean).join(' / ') + ` — ${t('waPaid')}` : '';
-    window.open(waLink(msg(m)), '_blank', 'noopener');
+    const text = msg(m), f = k === 'manual' && $('shot')?.files[0];
+    if (k === 'manual' && !f) { const e = $('woErr'); e.textContent = t('errShot'); e.hidden = false; return; }
+    if (f && navigator.canShare?.({files:[f]})) {
+      navigator.clipboard?.writeText(text).catch(()=>{});
+      navigator.share({files:[f], text}).catch(err => { if (err.name !== 'AbortError') window.open(waLink(text), '_blank', 'noopener'); });
+    } else window.open(waLink(text), '_blank', 'noopener');
     return;
   }
   if (e.target === $('wo') || e.target.closest('#woClose')) closeWO();

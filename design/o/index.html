@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Work order — Bilal Abu Zaina Design House</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/sheet.css">
+<script src="../assets/contact.js"></script>
+<script src="../assets/vault.js"></script>
+<style>
+.head{display:grid;gap:14px;padding-block:24px 22px;border-bottom:1.5px solid var(--rule)}
+@media (min-width:860px){.head{grid-template-columns:1fr auto;align-items:end}}
+.layout{display:grid;gap:28px;padding-block:24px 48px}
+@media (min-width:960px){.layout{grid-template-columns:1fr 360px;align-items:start}.side{position:sticky;top:16px}}
+.gal{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+.fig{margin:0;border:1.5px solid var(--rule);background:var(--paper);padding:8px}
+.pv{position:relative;overflow:hidden;background:var(--paper-2);user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.pv img{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges;pointer-events:none}
+.pv.full img{image-rendering:auto;pointer-events:auto}
+.pv .wm{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.pv .wm span{transform:rotate(-12deg);border:2px solid #fff;color:#fff;font-family:var(--mono);font-weight:600;font-size:13px;padding:4px 10px;background:rgba(0,0,0,.35);letter-spacing:.1em}
+.fig figcaption{display:flex;justify-content:space-between;gap:8px;padding-top:8px;align-items:center;min-width:0}
+.fig figcaption .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:600}
+.others{margin-top:18px;border-top:1.5px solid var(--rule)}
+.others .r .nm{overflow-wrap:anywhere;font-weight:600}
+.lockic{font-family:var(--mono);font-size:12px;color:var(--red);font-weight:600;white-space:nowrap}
+.pdfp{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.pdfp .pv{flex:none;width:46%}
+.state{padding:60px 0;text-align:center}
+.bar{height:6px;border:1.5px solid var(--ink);margin-top:10px}
+.bar i{display:block;height:100%;background:var(--red);width:0;transition:width .2s}
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="strip">
+    <a href="../"><span class="monogram">BAZ</span><span class="mono" data-t="studio"></span></a>
+    <div class="langs" role="group" aria-label="Language"><button type="button" data-lang="ar">ع</button><button type="button" data-lang="en">EN</button></div>
+  </div>
+
+  <div class="state" id="loading"><span class="mono muted" data-t="loading"></span></div>
+  <div class="state" id="missing" hidden><h1 class="big" data-t="missH"></h1><p class="muted" data-t="missP"></p><a class="btn wa" id="missWa" target="_blank" rel="noopener"></a></div>
+
+  <div id="main" hidden>
+    <div class="head">
+      <div>
+        <span class="mono red" id="ref"></span>
+        <h1 class="big" id="title"></h1>
+        <span class="mono muted" id="meta"></span>
+      </div>
+      <div><span class="stamp" id="stamp"></span></div>
+    </div>
+
+    <div class="layout">
+      <div>
+        <div id="unlocking" hidden class="box" style="margin-bottom:18px"><span class="mono" data-t="decrypting"></span><div class="bar"><i id="prog"></i></div></div>
+        <div id="badKey" hidden class="box" style="margin-bottom:18px"><b data-t="badKeyH"></b><p class="fine" style="margin:4px 0 0" data-t="badKeyP"></p></div>
+        <div class="gal" id="gal"></div>
+        <div class="others" id="others" hidden></div>
+      </div>
+
+      <aside class="side">
+        <div id="payPanel" class="box">
+          <h2 class="sec" data-t="payH"></h2>
+          <div class="lines" id="lines"></div>
+          <div class="r"><span><span data-t="instapay"></span> <code id="ip"></code></span><button type="button" class="cp" id="cp" data-t="copy"></button></div>
+          <label class="drop"><input type="file" accept="image/*" id="shot"><span class="mono" id="shotL" data-t="attach"></span></label>
+          <div class="err" id="err" hidden></div>
+          <button type="button" class="btn wa full" id="send" style="margin-top:12px"><span data-t="send"></span><span>→</span></button>
+          <p class="fine" data-t="payNote"></p>
+        </div>
+        <div id="dlPanel" class="box" hidden>
+          <h2 class="sec" data-t="dlH"></h2>
+          <p class="fine" style="margin-top:0" data-t="dlP"></p>
+          <button type="button" class="btn full" id="dlAll"><span data-t="dlAll"></span><span>↓</span></button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<script>
+const T = {
+  en: { studio: "Bilal Abu Zaina — Design House", loading: "Loading work order…",
+    missH: "Work order not found", missP: "The link may be incomplete, or the work is still being uploaded. Try again in a few minutes.",
+    contact: "Contact on WhatsApp", locked: "Preview — locked", unlocked: "Paid — unlocked",
+    files: "{n} files", pages: "{n} pages",
+    decrypting: "Unlocking your files…", badKeyH: "This unlock link doesn't match.", badKeyP: "Make sure you opened the full link from WhatsApp. You can still see the preview.",
+    payH: "Pay the balance", total: "Total", paid: "Paid", balance: "Balance",
+    instapay: "InstaPay", copy: "Copy", copied: "Copied",
+    attach: "+ Attach payment screenshot", errShot: "Attach the screenshot of your InstaPay transfer.",
+    send: "Send screenshot on WhatsApp",
+    payNote: "Transfer the balance by InstaPay, attach the screenshot and send. Once the payment is confirmed you'll get your unlock link on WhatsApp.",
+    msg: "Hello, I've paid the balance for work order {ref}: {amt}",
+    dlH: "Your files", dlP: "Download your drawings and renders. Keep this link private.", dlAll: "Download all", dl: "Download", open: "Open",
+    lockedFile: "Locked", preview: "PREVIEW" },
+  ar: { studio: "بلال أبو زينة — ديزاين هاوس", loading: "جاري تحميل الطلب…",
+    missH: "الطلب مش موجود", missP: "ممكن اللينك يكون ناقص، أو الشغل لسه بيترفع. جرّب كمان كام دقيقة.",
+    contact: "كلمنا واتساب", locked: "معاينة — مقفول", unlocked: "مدفوع — مفتوح",
+    files: "{n} ملفات", pages: "{n} صفحات",
+    decrypting: "جاري فتح الملفات…", badKeyH: "لينك الفتح ده مش مظبوط.", badKeyP: "اتأكد إنك فتحت اللينك كامل من واتساب. تقدر تشوف المعاينة برضه.",
+    payH: "ادفع الباقي", total: "الإجمالي", paid: "المدفوع", balance: "الباقي",
+    instapay: "إنستاباي", copy: "نسخ", copied: "اتنسخ",
+    attach: "+ أرفق صورة التحويل", errShot: "أرفق صورة تحويل إنستاباي.",
+    send: "ابعت صورة التحويل واتساب",
+    payNote: "حوّل الباقي بإنستاباي، أرفق صورة التحويل وابعت. بعد تأكيد الدفع هيوصلك لينك فتح الملفات على واتساب.",
+    msg: "أهلاً، دفعت باقي أمر الشغل {ref}: {amt}",
+    dlH: "ملفاتك", dlP: "نزّل الرسومات والصور. خلّي اللينك ده خاص بيك.", dlAll: "تحميل الكل", dl: "تحميل", open: "فتح",
+    lockedFile: "مقفول", preview: "معاينة" }
+};
+const $ = id => document.getElementById(id);
+let lang = (() => { try { return localStorage.getItem('bazLang') || 'ar'; } catch(e) { return 'ar'; } })();
+const t = (k, v={}) => String(T[lang][k] ?? k).replace(/\{(\w+)\}/g, (_, x) => v[x]);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money = n => Math.round(n).toLocaleString('en-US') + ' ' + (CONTACT.currency[lang] || 'EGP');
+const size = b => '<bdi dir="ltr">' + (b > 1048576 ? (b/1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(b/1024)) + ' KB') + '</bdi>';
+const id = (new URLSearchParams(location.search).get('id') || '').replace(/[^a-z0-9]/gi, '');
+const base = `../orders/${id}/`;
+const keyParam = new URLSearchParams(location.hash.slice(1)).get('k');
+let M = null, unlocked = null; // unlocked: array of {name, url, blob}
+
+function applyLang(){
+  const h = document.documentElement; h.lang = lang; h.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang));
+  document.querySelectorAll('[data-t]').forEach(el => el.textContent = t(el.dataset.t));
+  $('missWa').href = `https://wa.me/${CONTACT.whatsapp}`; $('missWa').textContent = t('contact');
+  if (M) render();
+}
+
+function render(){
+  document.title = `${M.ref} — ${M.title}`;
+  $('ref').textContent = M.ref; $('title').textContent = M.title;
+  const nImg = M.files.length;
+  $('meta').textContent = `${t('files',{n:nImg})} · ${new Date(M.created).toLocaleDateString(lang === 'ar' ? 'ar-EG' : 'en-GB')}`;
+  $('stamp').textContent = unlocked ? t('unlocked') : t('locked');
+  $('stamp').classList.toggle('ok', !!unlocked);
+  const bal = Math.max(0, M.total - M.paid);
+  $('lines').innerHTML = `<div><span>${t('total')}</span><span>${money(M.total)}</span></div><div><span>${t('paid')}</span><span>${money(M.paid)}</span></div><div class="due"><span>${t('balance')}</span><span>${money(bal)}</span></div>`;
+  $('ip').textContent = CONTACT.instapay;
+  $('payPanel').hidden = !!unlocked || bal <= 0;
+  $('dlPanel').hidden = !unlocked;
+
+  const visual = M.files.filter(f => f.previews && f.previews.length), other = M.files.filter(f => !f.previews || !f.previews.length);
+  $('gal').innerHTML = visual.map(f => {
+    const i = M.files.indexOf(f), u = unlocked && unlocked[i];
+    let media;
+    if (u && f.kind === 'image') media = `<div class="pv full"><img src="${u.url}" alt="${esc(f.name)}"></div>`;
+    else {
+      const wm = u ? '' : `<div class="wm"><span>${t('preview')}</span></div>`;
+      media = f.previews.length > 1 ? `<div class="pdfp">${f.previews.map(p => `<div class="pv"><img src="${base}${p}" alt="">${wm}</div>`).join('')}</div>`
+        : `<div class="pv"><img src="${base}${f.previews[0]}" alt="${esc(f.name)}">${wm}</div>`;
+      if (u) media = `<a href="${u.url}" target="_blank" rel="noopener" style="display:block">${media}</a>`;
+    }
+    const right = u ? `<span style="display:flex;gap:14px">${f.kind === 'pdf' ? `<a class="link" href="${u.url}" target="_blank" rel="noopener">${t('open')}</a>` : ''}<button class="link" type="button" data-dl="${i}">${t('dl')} ↓</button></span>` : `<span class="lockic">■ ${t('lockedFile')}</span>`;
+    const pg = f.kind === 'pdf' && f.pages ? ` · ${t('pages',{n:f.pages})}` : '';
+    return `<figure class="fig">${media}<figcaption><span class="nm" title="${esc(f.name)}">${esc(f.name)}</span>${right}</figcaption><span class="mono muted">${size(f.size)}${pg}</span></figure>`;
+  }).join('');
+  $('others').hidden = !other.length;
+  $('others').innerHTML = other.map(f => { const i = M.files.indexOf(f), u = unlocked && unlocked[i];
+    return `<div class="r"><span><span class="nm">${esc(f.name)}</span> <span class="mono muted">${size(f.size)}</span></span>${u ? `<button class="link" type="button" data-dl="${i}">${t('dl')} ↓</button>` : `<span class="lockic">■ ${t('lockedFile')}</span>`}</div>`; }).join('');
+}
+
+async function unlock(){
+  let key;
+  try { key = await Vault.aesKey(Vault.unb64url(keyParam)); } catch(e) { $('badKey').hidden = false; return; }
+  if (!(await Vault.testCheck(key, M.check))) { $('badKey').hidden = false; return; }
+  $('unlocking').hidden = false;
+  const out = [];
+  for (let i = 0; i < M.files.length; i++) {
+    const f = M.files[i];
+    const ct = await (await fetch(base + f.bin, {cache:'no-store'})).arrayBuffer();
+    const pt = await Vault.decrypt(key, f.iv, ct);
+    const blob = new Blob([pt], {type: f.mime || 'application/octet-stream'});
+    out.push({ name: f.name, blob, url: URL.createObjectURL(blob) });
+    $('prog').style.width = Math.round((i+1) / M.files.length * 100) + '%';
+  }
+  unlocked = out; $('unlocking').hidden = true; render();
+}
+function download(i){ const a = document.createElement('a'); a.href = unlocked[i].url; a.download = unlocked[i].name; document.body.appendChild(a); a.click(); a.remove(); }
+
+document.addEventListener('click', async e => {
+  const lb = e.target.closest('[data-lang]');
+  if (lb) { lang = lb.dataset.lang; try { localStorage.setItem('bazLang', lang); } catch(_){} applyLang(); return; }
+  const d = e.target.closest('[data-dl]'); if (d) return download(+d.dataset.dl);
+  if (e.target.closest('#dlAll')) { for (let i = 0; i < unlocked.length; i++) { download(i); await new Promise(r => setTimeout(r, 500)); } return; }
+  if (e.target.closest('#cp')) { navigator.clipboard?.writeText(CONTACT.instapay).then(() => { $('cp').textContent = t('copied'); setTimeout(() => $('cp').textContent = t('copy'), 1500); }).catch(()=>{}); return; }
+  if (e.target.closest('#send')) {
+    const f = $('shot').files[0];
+    if (!f) { $('err').textContent = t('errShot'); $('err').hidden = false; return; }
+    const text = t('msg', {ref: M.ref, amt: money(M.total - M.paid)}) + '\n' + location.origin + location.pathname + '?id=' + id;
+    if (navigator.canShare?.({files:[f]})) {
+      navigator.clipboard?.writeText(text).catch(()=>{});
+      navigator.share({files:[f], text}).catch(err => { if (err.name !== 'AbortError') window.open(`https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(text)}`, '_blank', 'noopener'); });
+    } else window.open(`https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+  }
+});
+$('shot').addEventListener('change', () => { const f = $('shot').files[0]; $('shotL').textContent = f ? '✓ ' + f.name : t('attach'); $('err').hidden = true; });
+document.addEventListener('contextmenu', e => { if (!unlocked && e.target.closest('.pv')) e.preventDefault(); });
+
+(async () => {
+  applyLang();
+  try {
+    if (!id) throw 0;
+    const r = await fetch(base + 'manifest.json', {cache:'no-store'});
+    if (!r.ok) throw 0;
+    M = await r.json();
+  } catch(e) { $('loading').hidden = true; $('missing').hidden = false; return; }
+  $('loading').hidden = true; $('main').hidden = false;
+  render();
+  if (keyParam) unlock();
+})();
+</script>
+</body>
+</html>
