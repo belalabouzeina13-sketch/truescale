@@ -88,11 +88,16 @@ const CONFIG = {
   // Your work, shown near the top. Put images in design/work/.
   // w/h = image size in pixels; order = design it links to ("Order a design like this").
   portfolio: [
-    { src: "work/dressing-room-walnut.jpg", w: 958, h: 1120, order: "dressing", en: "Dressing room — walnut, LED shelving", ar: "غرفة ملابس — جوز، إضاءة LED" },
-    { src: "work/kitchen-compact.jpg",      w: 710, h: 920,  order: "kitchen",  en: "Compact kitchen — oak & marble",       ar: "مطبخ صغير — أرو ورخام" },
-    { src: "work/wardrobe-walnut-light.jpg",w: 976, h: 1078, order: "wardrobe", en: "Wardrobe wall with hidden door",       ar: "حائط دواليب بباب مخفي" },
-    { src: "work/kitchen-arch.jpg",         w: 586, h: 1400, order: "kitchen",  en: "Kitchen through the arch",             ar: "مطبخ من ورا القوس" },
-    { src: "work/wardrobe-walnut.jpg",      w: 976, h: 1078, order: "wardrobe", en: "Wardrobe — walnut, full height",       ar: "دولاب — جوز، لحد السقف" }
+    { src: "work/tv-wall-marble.jpg",        w: 1184, h: 880,  order: "tv",       en: "TV wall — marble & walnut shelving",   ar: "حائط تليفزيون — رخام ومكتبة جوز" },
+    { src: "work/bathroom-checkered.jpg",    w: 934,  h: 1400, order: "bathroom", en: "Guest bathroom — burgundy & checkered marble", ar: "حمام ضيوف — عنابي ورخام شطرنج" },
+    { src: "work/dressing-room-walnut.jpg",  w: 958,  h: 1120, order: "dressing", en: "Dressing room — walnut, LED shelving", ar: "غرفة ملابس — جوز، إضاءة LED" },
+    { src: "work/kitchen-burgundy-sink.jpg", w: 896,  h: 1152, order: "kitchen",  en: "Kitchen — burgundy zellige & wood",    ar: "مطبخ — زليج عنابي وخشب" },
+    { src: "work/living-room-marble.jpg",    w: 1400, h: 1045, order: "3d",       en: "Living room — full 3D design",         ar: "ريسبشن — تصميم 3D كامل" },
+    { src: "work/kitchen-compact.jpg",       w: 710,  h: 920,  order: "kitchen",  en: "Compact kitchen — oak & marble",       ar: "مطبخ صغير — أرو ورخام" },
+    { src: "work/bathroom-vanity.jpg",       w: 843,  h: 1264, order: "bathroom", en: "Bathroom vanity — marble basin",       ar: "حوض حمام — رخام" },
+    { src: "work/wardrobe-walnut-light.jpg", w: 976,  h: 1078, order: "wardrobe", en: "Wardrobe wall with hidden door",       ar: "حائط دواليب بباب مخفي" },
+    { src: "work/kitchen-arch.jpg",          w: 586,  h: 1400, order: "kitchen",  en: "Kitchen through the arch",             ar: "مطبخ من ورا القوس" },
+    { src: "work/wardrobe-walnut.jpg",       w: 976,  h: 1078, order: "wardrobe", en: "Wardrobe — walnut, full height",       ar: "دولاب — جوز، لحد السقف" }
   ]
 };
 </script>
@@ -632,7 +637,7 @@ function render(){
   const hasWork = CONFIG.portfolio.length > 0;
   $('s4').hidden = !hasWork;
   if (hasWork) $('work').innerHTML = CONFIG.portfolio.map((w,i) => {
-    const pk = CONFIG.packages.find(p => p.id === w.order && p.price != null);
+    const pk = CONFIG.packages.find(p => p.id === w.order && p.price != null) || CONFIG.perMeter.find(p => p.id === w.order);
     return `<figure>
       <button type="button" class="zoom" data-zoom="${i}" aria-label="${esc(L(w))}"><img src="${esc(w.src)}" alt="${esc(L(w))}" width="${w.w}" height="${w.h}" loading="${i < 2 ? 'eager' : 'lazy'}" decoding="async"></button>
       <figcaption><span class="mono muted">${t('fig',{n:i+2})}</span><span class="cap-t">${esc(L(w))}</span>
